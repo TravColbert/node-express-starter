@@ -1,9 +1,9 @@
-module.exports = function(app, explicitConfig) {
+module.exports = function (app, explicitConfig) {
     const getConfigValue = require('../lib/tools')(explicitConfig)
 
     app.locals.nodeEnv = getConfigValue(
-        "NODE_ENV", 
-        "development", 
+        "NODE_ENV",
+        "development",
         true
     )
     // setting debug to null will disable it
@@ -28,12 +28,22 @@ module.exports = function(app, explicitConfig) {
         app.locals.nodeEnv !== "production"
     )
     app.locals.viewPath = getConfigValue(
-        "VIEW_ROOT",
+        "VIEW_PATH",
         "views",
         app.locals.nodeEnv !== "production"
     )
-    app.locals.publicRoot = getConfigValue(
-        "PUBLIC_ROOT",
+    app.locals.controllerPath = getConfigValue(
+        "CONTROLLER_PATH",
+        "controllers",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.modelPath = getConfigValue(
+        "MODEL_PATH",
+        "models",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.publicPath = getConfigValue(
+        "PUBLIC_PATH",
         "public",
         app.locals.nodeEnv !== "production"
     )

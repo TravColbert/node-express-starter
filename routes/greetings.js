@@ -2,19 +2,17 @@ const express = require("express")
 const router = express.Router({ mergeParams: true })
 const path = require('path')
 
-// Require the connected controller
-const greetingsController = require(path.join(__dirname, '../controllers/greetings'))
+module.exports = function (app) {
+    // Require the connected controller
+    const greetingsController = require(path.join(__dirname, '../', app.locals.controllerPath, 'greetings'))
 
-module.exports = function () {
     router.route("/new")
         .get((req, res) => {
-            console.log("new")
             greetingsController.new(req, res)
         })
 
     router.route("/:lang")
         .get((req, res) => {
-            console.log("show")
             greetingsController.show(req, res)
         })
 
@@ -116,6 +114,6 @@ module.exports = function () {
             // it is not used to get the body of the response
             // So, in this case, the above string will be sent
         })
-        
+
     return router
 }

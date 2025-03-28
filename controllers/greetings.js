@@ -47,11 +47,13 @@ module.exports = {
         // If a greeting with this language already exists
         // return a 400 error with a new form
         if (greetings.some(g => g.lang === newGreeting.lang)) {
-            return res.status(400).render('greetings/new', { errors: [
-                {
-                    error: `A greeting in ${newGreeting.lang} already exists`
-                }
-            ]})
+            return res.status(400).render('greetings/new', {
+                errors: [
+                    {
+                        error: `A greeting in ${newGreeting.lang} already exists`
+                    }
+                ]
+            })
         }
         greetings.push(newGreeting)
         res.redirect(`/greetings/${newGreeting.lang}`)
@@ -64,7 +66,7 @@ module.exports = {
         const greeting = greetings.find(g => g.lang === req.params.lang)
 
         if (greeting) {
-            res.render('greetings/show', { greeting })
+            return res.render('greetings/show', { greeting })
         }
 
         res.status(404).render('errors/404')
