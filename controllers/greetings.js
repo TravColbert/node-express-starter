@@ -1,74 +1,76 @@
 'use strict'
 
-var greetings = [
-    {
-        "lang": "en",
-        "greeting": "Hello World"
-    },
-    {
-        "lang": "es",
-        "greeting": "Hola Mundo"
-    },
-    {
-        "lang": "fr",
-        "greeting": "Bonjour le monde"
-    },
-    {
-        "lang": "de",
-        "greeting": "Hallo Welt"
-    },
-    {
-        "lang": "it",
-        "greeting": "Ciao mondo"
-    },
-    {
-        "lang": "ja",
-        "greeting": "こんにちは世界"
-    },
-    {
-        "lang": "zh",
-        "greeting": "你好，世界"
-    }
-]
+module.exports = function (app) {
+    app.locals.debug && console.debug('Loading greetings controller')
 
-module.exports = {
-    index: function (req, res) {
-        const greetingsCollection = req.query.lang ? greetings.filter(g => g.lang === req.query.lang) : greetings
-        res.render('greetings/index', { greetings: greetingsCollection })
-    },
-    new: function (req, res) {
-        res.render('greetings/new')
-    },
-    create: function (req, res) {
-        const newGreeting = {
-            lang: req.body.lang,
-            greeting: req.body.greeting
-        }
-        // If a greeting with this language already exists
-        // return a 400 error with a new form
-        if (greetings.some(g => g.lang === newGreeting.lang)) {
-            return res.status(400).render('greetings/new', {
-                errors: [
-                    {
-                        error: `A greeting in ${newGreeting.lang} already exists`
-                    }
-                ]
-            })
-        }
-        greetings.push(newGreeting)
-        res.redirect(`/greetings/${newGreeting.lang}`)
-    },
-    destroy: function (req, res) {
-        greetings = greetings.filter(g => g.lang !== req.params.lang)
-        res.redirect('/greetings')
-    },
-    show: function (req, res) {
-        const greeting = greetings.find(g => g.lang === req.params.lang)
+    return {
+        index: function (req, res) {
+            const greetingsCollection = req.query.lang ? app.locals.models['greetings'].find(req.query.lang) : app.locals.models['greetings'].all()
+            res.render('greetings/index', { greetings: greetingsCollection })
+        },
+        new: function (req, res) {
+            res.render('greetings/new')
+        },
+        create: function (req, res) {
+            const newGreeting = {
+                lang: req.body.lang,
+                greeting: req.body.greeting
+            }
+            // If a greeting with this language already exists
+            // return a 400 error with a new form
+            const insertedGreetingId = app.locals.models['greetings'].create(newGreeting)
 
-        if (greeting) {
-            return res.render('greetings/show', { greeting })
-        }
+            if (!insertedGreetingId) {
+                return res.status(400).render('greetings/new', {
+                    errors: [
+                        {
+                            error: `A greeting in ${newGreeting.lang} already exists`
+                        }
+                    ]
+                })
+            }
 
-        res.status(404).render('errors/404')
+            res.redirect(`/greetings/${insertedGreetingId}`)
+        },
+        destroy: function (req, res) {
+            app.locals.models['greetings'].destroy(req.params.lang)
+            res.redirect('/greetings')
+        },
+        show: function (req, res) {
+            const greeting = app.locals.models['greetings'].find(req.params.lang)
+
+            if (greeting) {
+                return res.render('greetings/show', { greeting })
+            }
+
+            res.status(404).render('errors/404')
+        },
+        edit: function (req, res) {
+            const greeting = app.locals.models['greetings'].find(req.params.lang)
+            if (!greeting) {
+                return res.status(404).render('errors/404')
+            }
+            res.render('greetings/edit', { greeting })
+        },
+        update: function (req, res) {
+            const updatedGreeting = {
+                lang: req.body.lang,
+                greeting: req.body.greeting
+            }
+
+            const updatedGreetingId = app.locals.models['greetings'].update(updatedGreeting)
+
+            if (!updatedGreetingId) {
+                return res.status(400).render('greetings/new', {
+                    errors: [
+                        {
+                            error: `Could not update greeting`
+                        }
+                    ]
+                })
+            }
+
+            res.redirect(`/greetings/${updatedGreetingId}`)
+        }
     }
 }

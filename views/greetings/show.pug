@@ -5,6 +5,7 @@ block content
     .greeting
         h2(lang=greeting.lang)= greeting.greeting
     .navigation
+        a(href=`/greetings/${greeting.lang}/edit`) Edit Greeting
         button(hx-delete=`/greetings/${greeting.lang}` hx-target="body") Delete Greeting
         a(href="/greetings") Back to greetings
 

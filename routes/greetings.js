@@ -4,21 +4,29 @@ const path = require('path')
 
 module.exports = function (app) {
     // Require the connected controller
-    const greetingsController = require(path.join(__dirname, '../', app.locals.controllerPath, 'greetings'))
+    const greetingsController = require(path.join(__dirname, '../', app.locals.controllerPath, 'greetings'))(app)
 
     router.route("/new")
         .get((req, res) => {
-            greetingsController.new(req, res)
+            return greetingsController.new(req, res)
+        })
+
+    router.route("/:lang/edit")
+        .get((req, res) => {
+            return greetingsController.edit(req, res)
         })
 
     router.route("/:lang")
         .get((req, res) => {
-            greetingsController.show(req, res)
+            return greetingsController.show(req, res)
+        })
+        .post((req, res) => {
+            return greetingsController.update(req, res)
         })
 
     router.route("/")
         .get((req, res) => {
-            greetingsController.index(req, res)
+            return greetingsController.index(req, res)
         })
         .post((req, res) => {
             /**

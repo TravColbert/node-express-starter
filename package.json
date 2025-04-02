@@ -1,7 +1,7 @@
 {
-  "name": "express-mongoose-starter",
+  "name": "node-express-starter",
   "version": "1.0.0",
-  "description": "Starter boilerplate for node/express/mongodb applications",
+  "description": "Starter boilerplate for node/express applications",
   "license": "ISC",
   "author": "",
   "type": "commonjs",
@@ -20,7 +20,6 @@
     "express-session": "^1.18.1",
     "helmet": "^8.1.0",
     "memorystore": "^1.6.7",
-    "mongoose": "^8.13.0",
     "pug": "^3.0.3"
   },
   "devDependencies": {
