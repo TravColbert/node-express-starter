@@ -4,29 +4,29 @@ const path = require('path')
 
 module.exports = function (app) {
     // Require the connected controller
-    const greetingsController = require(path.join(__dirname, '../', app.locals.controllerPath, 'greetings'))(app)
+    const controller = require(path.join(__dirname, '../', app.locals.controllerPath, 'greetings'))(app)
 
     router.route("/new")
         .get((req, res) => {
-            return greetingsController.new(req, res)
+            return controller.new(req, res)
         })
 
-    router.route("/:lang/edit")
+    router.route("/:id/edit")
         .get((req, res) => {
-            return greetingsController.edit(req, res)
+            return controller.edit(req, res)
         })
 
-    router.route("/:lang")
+    router.route("/:id")
         .get((req, res) => {
-            return greetingsController.show(req, res)
+            return controller.show(req, res)
         })
         .post((req, res) => {
-            return greetingsController.update(req, res)
+            return controller.update(req, res)
         })
 
     router.route("/")
         .get((req, res) => {
-            return greetingsController.index(req, res)
+            return controller.index(req, res)
         })
         .post((req, res) => {
             /**
@@ -51,7 +51,7 @@ module.exports = function (app) {
              * HTTP/1.1 201 Created
              * Location: /users/123
              */
-            return greetingsController.create(req, res)
+            return controller.create(req, res)
         })
         .put((_req, res) => {
             /**
@@ -88,7 +88,7 @@ module.exports = function (app) {
             res.send("Hello World (PUT)")
         })
         .delete((_req, res) => {
-            return greetingsController.destroy(req, res)
+            return controller.destroy(req, res)
         })
         .patch((_req, res) => {
             /**

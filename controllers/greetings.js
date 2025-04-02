@@ -33,11 +33,11 @@ module.exports = function (app) {
             res.redirect(`/greetings/${insertedGreetingId}`)
         },
         destroy: function (req, res) {
-            app.locals.models['greetings'].destroy(req.params.lang)
+            app.locals.models['greetings'].destroy(req.params.id)
             res.redirect('/greetings')
         },
         show: function (req, res) {
-            const greeting = app.locals.models['greetings'].find(req.params.lang)
+            const greeting = app.locals.models['greetings'].find(req.params.id)
 
             if (greeting) {
                 return res.render('greetings/show', { greeting })
@@ -46,7 +46,7 @@ module.exports = function (app) {
             res.status(404).render('errors/404')
         },
         edit: function (req, res) {
-            const greeting = app.locals.models['greetings'].find(req.params.lang)
+            const greeting = app.locals.models['greetings'].find(req.params.id)
             if (!greeting) {
                 return res.status(404).render('errors/404')
             }
