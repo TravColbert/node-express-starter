@@ -23,6 +23,9 @@ module.exports = function (app) {
         .post((req, res) => {
             return controller.update(req, res)
         })
+        .delete((req, res) => {
+            return controller.destroy(req, res)
+        })
 
     router.route("/")
         .get((req, res) => {
@@ -86,9 +89,6 @@ module.exports = function (app) {
              * If PUT on the collection is invalid: Return 405 Method Not Allowed or 400 Bad Request.
              */
             res.send("Hello World (PUT)")
-        })
-        .delete((_req, res) => {
-            return controller.destroy(req, res)
         })
         .patch((_req, res) => {
             /**

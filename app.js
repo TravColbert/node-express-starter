@@ -81,6 +81,15 @@ module.exports = function (explicitConfig = {}) {
         }
 
         /**
+         * Set up middleware that is session-dependent
+         */
+        try {
+            require(path.join(__dirname, 'config', 'middleware'))(app)
+        } catch (error) {
+            console.error(`Error setting up middleware!\n\tmessage: '${error.message}'`)
+        }
+
+        /**
          * Set up template engine
          */
         try {

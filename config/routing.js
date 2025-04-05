@@ -1,11 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = function(app) {
+module.exports = function (app) {
     // Get all .js files from router path
     const routerPath = path.join(__dirname, '/..', app.locals.routerPath)
     const routerFiles = fs.readdirSync(routerPath)
         .filter(file => file.endsWith('.js'))
+        .filter(file => file !== 'index.js') // Exclude index.js
 
     // Load and mount each router
     routerFiles.forEach(file => {
@@ -14,6 +15,10 @@ module.exports = function(app) {
         const router = require(path.join(routerPath, file))(app)
         app.use(`/${routeName}`, router)
     })
+
+    app.locals.debug && console.debug(`Mounting router: index`)
+    const indexRouter = require(path.join(routerPath, 'index'))(app)
+    app.use('/', indexRouter)
 
     app.use((err, _req, res, _next) => {
         console.dir(err.message)
