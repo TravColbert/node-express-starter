@@ -6,3 +6,4 @@ Makefile
 data
 .devcontainer/
 app/
+app_*/
