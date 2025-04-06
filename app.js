@@ -45,6 +45,7 @@ module.exports = function (explicitConfig = {}) {
      * The process.env and config files are merged into the app.locals.
      */
     require("dotenv").config()
+    const fs = require('fs')
     const path = require("path")
     const express = require("express")
 
@@ -56,69 +57,90 @@ module.exports = function (explicitConfig = {}) {
         /**
          * Set up configurable options
          */
-        try {
-            require(path.join(__dirname, 'config', 'options'))(app, explicitConfig)
-        } catch (error) {
-            console.error(`Error setting up configurable options!\n\tmessage: '${error.message}'`)
+        const optionsLoader = path.join(__dirname, 'config', 'options.js')
+        if (fs.existsSync(optionsLoader)) {
+            try {
+                require(optionsLoader)(app, explicitConfig)
+            } catch (error) {
+                console.error(`Error setting up configurable options\n\t${error.message}`)
+            }
         }
 
         /** 
-         * Further setup of app and middleware 
+         * Further setup of app
         */
-        try {
-            require(path.join(__dirname, 'config', 'init'))(app)
-        } catch (error) {
-            console.error(`Error initializing the app!\n\tmessage: '${error.message}'`)
+        const initLoader = path.join(__dirname, 'config', 'init.js')
+        if (fs.existsSync(initLoader)) {
+            try {
+                require(initLoader)(app)
+            } catch (error) {
+                console.error(`Error setting up initial configuration for app\n\t${error.message}`)
+            }
         }
 
         /**
          * Set up sessions
          */
-        try {
-            require(path.join(__dirname, 'config', 'sessions'))(app)
-        } catch (error) {
-            console.error(`Error setting up sessions!\n\tmessage: '${error.message}'`)
+        const sessionLoader = path.join(__dirname, 'config', 'sessions.js')
+        if (fs.existsSync(sessionLoader)) {
+            try {
+                require(sessionLoader)(app)
+            } catch (error) {
+                console.error(`Error setting up sessions!\n\t${error.message}`)
+            }
         }
 
         /**
          * Set up middleware that is session-dependent
          */
-        try {
-            require(path.join(__dirname, 'config', 'middleware'))(app)
-        } catch (error) {
-            console.error(`Error setting up middleware!\n\tmessage: '${error.message}'`)
+        const middlewareLoader = path.join(__dirname, 'config', 'middleware.js')
+        if (fs.existsSync(middlewareLoader)) {
+            try {
+                require(middlewareLoader)(app)
+            } catch (error) {
+                console.error(`Error setting up middleware:\n\t${error.message}`)
+            }
         }
 
         /**
          * Set up template engine
          */
-        try {
-            require(path.join(__dirname, app.locals.configPath, 'templating'))(app)
-        } catch (error) {
-            console.error(`Error setting up template engine!\n\tmessage: '${error.message}'`)
+        const templaterEngineLoader = path.join(__dirname, 'config', 'templating.js')
+        if (fs.existsSync(templaterEngineLoader)) {
+            try {
+                require(templaterEngineLoader)(app)
+            } catch (error) {
+                console.error(`Error setting up template engine:\n\t${error.message}`)
+            }
         }
 
         /**
          * Serve static files
          */
-        app.use(express.static(path.join(__dirname, app.locals.publicPath)))
+        app.use(express.static(path.join(__dirname, app.locals.appPath, app.locals.publicPath)))
 
         /**
          * Set up models
          */
-        try {
-            require(path.join(__dirname, app.locals.configPath, 'models'))(app)
-        } catch (error) {
-            console.error(`Error setting up models!\n\tmessage: '${error.message}'`)
+        const modelLoader = path.join(__dirname, 'config', 'models.js')
+        if (fs.existsSync(modelLoader)) {
+            try {
+                require(modelLoader)(app)
+            } catch (error) {
+                console.error(`Error setting up models:\n\t${error.message}`)
+            }
         }
 
         /**
          * Set up routes
          */
-        try {
-            require(path.join(__dirname, app.locals.configPath, 'routing'))(app)
-        } catch (error) {
-            console.error(`Error setting up routes!\n\tmessage: '${error.message}'`)
+        const routeLoader = path.join(__dirname, 'config', 'routing.js')
+        if (fs.existsSync(routeLoader)) {
+            try {
+                require(routeLoader)(app)
+            } catch (error) {
+                console.error(`Error setting up routes:\n\t${error.message}`)
+            }
         }
 
         /** Resolve the promise */

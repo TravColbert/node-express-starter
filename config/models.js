@@ -5,7 +5,7 @@ module.exports = function (app) {
     app.locals.models = []
 
     // Get all .js files from model path
-    const modelPath = path.join(__dirname, '/..', app.locals.modelPath)
+    const modelPath = path.join(__dirname, '/..', app.locals.appPath, app.locals.modelPath)
     const modelFiles = fs.readdirSync(modelPath)
         .filter(file => file.endsWith('.js'))
 

@@ -4,7 +4,7 @@ const path = require('path')
 
 module.exports = function (app) {
     // Require the connected controller
-    const controller = require(path.join(__dirname, '../', app.locals.controllerPath, 'greetings'))(app)
+    const controller = require(path.join(__dirname, '../../', app.locals.appPath, app.locals.controllerPath, 'greetings'))(app)
 
     router.route("/new")
         .get((req, res) => {

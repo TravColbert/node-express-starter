@@ -5,3 +5,4 @@ Makefile
 .env
 data
 .devcontainer/
+app/
