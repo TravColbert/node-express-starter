@@ -47,6 +47,11 @@ module.exports = function (app, explicitConfig) {
         "models",
         app.locals.nodeEnv !== "production"
     )
+    app.locals.helperPath = getConfigValue(
+        "HELPER_PATH",
+        "helpers",
+        app.locals.nodeEnv !== "production"
+    )
     app.locals.publicPath = getConfigValue(
         "PUBLIC_PATH",
         "public",
