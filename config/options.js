@@ -14,7 +14,7 @@ module.exports = function (app, explicitConfig) {
     )
     app.locals.port = getConfigValue(
         "PORT",
-        3000,
+        8080,
         app.locals.nodeEnv !== "production"
     )
     app.locals.appPath = getConfigValue(
