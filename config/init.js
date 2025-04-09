@@ -1,9 +1,7 @@
 const helmet = require("helmet")
-// const cors = require("cors")
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const compression = require('compression')
-
 
 module.exports = function (app) {
   app.use(helmet.contentSecurityPolicy({
@@ -17,7 +15,6 @@ module.exports = function (app) {
       connectSrc: ["'self'", "https://api.example.com"]
     }
   }))
-  // app.use(cors())
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(cookieParser())
