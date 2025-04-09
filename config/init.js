@@ -11,6 +11,7 @@ module.exports = function (app) {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "https://unpkg.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
+      styleSrcElem: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:"],
       objectSrc: ["'none'"],
       connectSrc: ["'self'", "https://api.example.com"]
