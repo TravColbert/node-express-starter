@@ -25,6 +25,10 @@ module.exports = function (app) {
         app.locals.debug && console.debug(`Mounting router: index`)
         const indexRouter = require(path.join(routerPath, 'index'))(app)
         app.use('/', indexRouter)
+    } else {
+        app.use('/', (req, res) => {
+            res.render('home')
+        })
     }
 
     /**
