@@ -14,7 +14,12 @@ module.exports = function (app, explicitConfig) {
     )
     app.locals.port = getConfigValue(
         "PORT",
-        3000,
+        8080,
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.appPath = getConfigValue(
+        "APP_PATH",
+        "app_demo",
         app.locals.nodeEnv !== "production"
     )
     app.locals.routerPath = getConfigValue(
@@ -40,6 +45,11 @@ module.exports = function (app, explicitConfig) {
     app.locals.modelPath = getConfigValue(
         "MODEL_PATH",
         "models",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.helperPath = getConfigValue(
+        "HELPER_PATH",
+        "helpers",
         app.locals.nodeEnv !== "production"
     )
     app.locals.publicPath = getConfigValue(

@@ -14,34 +14,9 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - 3000:3000
+      - 8080:8080
     networks:
       - app-network
-    depends_on:
-      db:
-        condition: service_healthy
-
-  db:
-    image: mongo:latest
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    ports:
-      - 27017:27017
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - app-network
-    healthcheck:
-      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  mongo-data:
-
 
 networks:
   app-network:
