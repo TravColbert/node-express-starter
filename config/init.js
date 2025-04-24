@@ -7,12 +7,12 @@ module.exports = function (app) {
   app.use(helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'script-src-elem'"],
       scriptSrc: ["'self'", "https://unpkg.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       styleSrcElem: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "data:"],
       objectSrc: ["'none'"],
-      connectSrc: ["'self'", "https://api.example.com"]
     }
   }))
   app.use(bodyParser.json())
