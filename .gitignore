@@ -7,4 +7,5 @@ data
 .devcontainer/
 app/
 app_*/
+!app_demo/
 *.notinuse
