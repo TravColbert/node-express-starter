@@ -8,10 +8,9 @@
 
 ARG NODE_VERSION=22.14.0
 
-FROM alpine/git as app_blog
-
+# Stage the app_blog module 
+FROM alpine/git AS app_blog
 WORKDIR /app
-
 RUN git clone https://github.com/TravColbert/node-express-starter-app-blog.git
 
 FROM node:${NODE_VERSION}-alpine
