@@ -8,12 +8,20 @@
 
 ARG NODE_VERSION=22.14.0
 
+FROM alpine/git as app_blog
+
+WORKDIR /app
+
+RUN git clone https://github.com/TravColbert/node-express-starter-app-blog.git
+
 FROM node:${NODE_VERSION}-alpine
 
 # Use production node environment by default.
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 WORKDIR /usr/src/app
+
+COPY --from=app_blog /app/node-express-starter-app-blog /usr/src/app/app_blog
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
@@ -34,4 +42,4 @@ COPY . .
 EXPOSE 8080
 
 # Run the application.
-CMD npm start
+ENTRYPOINT [ "npm", "start" ]
