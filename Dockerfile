@@ -20,7 +20,7 @@ FROM node:${NODE_VERSION}-alpine
 ENV NODE_ENV=production
 
 # add GIT for module installs through jobs
-#RUN apk update && apk add git
+RUN apk update && apk add git
 
 WORKDIR /usr/src/app
 
