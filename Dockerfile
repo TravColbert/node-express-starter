@@ -12,6 +12,7 @@ ARG NODE_VERSION=22.14.0
 FROM alpine/git AS app_blog
 WORKDIR /app
 RUN git clone https://github.com/TravColbert/node-express-starter-app-blog.git
+RUN ./node-express-starter-app-blog/jobs/job.sh
 
 # The base layer stage
 FROM node:${NODE_VERSION}-alpine
