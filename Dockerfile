@@ -13,14 +13,18 @@ FROM alpine/git AS app_blog
 WORKDIR /app
 RUN git clone https://github.com/TravColbert/node-express-starter-app-blog.git
 
+# The base layer stage
 FROM node:${NODE_VERSION}-alpine
 
 # Use production node environment by default.
 ENV NODE_ENV=production
 
+# add GIT for module installs through jobs
+RUN apk update && apk add git
+
 WORKDIR /usr/src/app
 
-COPY --from=app_blog /app/node-express-starter-app-blog /usr/src/app/app_blog
+COPY --from=app_blog /app/node-express-starter-app-blog ./app_blog
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
@@ -33,6 +37,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 # Run the application as a non-root user.
 USER node
+
+#RUN ./app_blog/jobs/job.sh
 
 # Copy the rest of the source files into the image.
 COPY . .
