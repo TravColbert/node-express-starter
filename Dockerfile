@@ -14,18 +14,15 @@ ARG APP_TOKEN=bogus
 ENV APP_TOKEN=$APP_TOKEN
 WORKDIR /app
 RUN git clone https://github.com/TravColbert/node-express-starter-app-blog.git
-RUN ./node-express-starter-app-blog/jobs/job.sh $APP_TOKEN
+RUN sh ./node-express-starter-app-blog/jobs/job.sh $APP_TOKEN
 
 # The base layer stage
 FROM node:${NODE_VERSION}-alpine
 
 # Use production node environment by default.
 ENV NODE_ENV=production
-
 ARG APP_PATH=app_demo
 ENV APP_PATH=$APP_PATH
-# add GIT for module installs through jobs
-RUN apk update && apk add git
 
 WORKDIR /usr/src/app
 
