@@ -10,9 +10,12 @@ ARG NODE_VERSION=22.14.0
 
 # Stage the app_blog module 
 FROM alpine/git AS app_blog
+ARG APP_TOKEN=bogus
+ENV APP_TOKEN=$APP_TOKEN
 WORKDIR /app
 RUN git clone https://github.com/TravColbert/node-express-starter-app-blog.git
-RUN ./node-express-starter-app-blog/jobs/job.sh
+RUN echo "Fetching articles with token: ${APP_TOKEN}"
+RUN sh /app/node-express-starter-app-blog/jobs/job.sh ${APP_TOKEN}
 
 # The base layer stage
 FROM node:${NODE_VERSION}-alpine
@@ -35,8 +38,6 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
-
-RUN ./app_blog/jobs/job.sh
 
 # Run the application as a non-root user.
 USER node

@@ -11,6 +11,8 @@ services:
   server:
     build:
       context: .
+      args:
+        - APP_TOKEN=${APP_TOKEN:-bogus}
     environment:
       NODE_ENV: production
     ports:
