@@ -20,7 +20,7 @@ module.exports = function (app, explicitConfig) {
     app.locals.appPath = getConfigValue(
         "APP_PATH",
         "app_demo",
-        app.locals.nodeEnv !== "production"
+        true
     )
     app.locals.routerPath = getConfigValue(
         "ROUTER_PATH",

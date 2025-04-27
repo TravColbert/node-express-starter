@@ -10,6 +10,8 @@ ARG NODE_VERSION=22.14.0
 
 # Stage the app_blog module 
 FROM alpine/git AS app_blog
+ARG APP_TOKEN=bogus
+ENV APP_TOKEN=$APP_TOKEN
 WORKDIR /app
 RUN git clone https://github.com/TravColbert/node-express-starter-app-blog.git
 RUN ./node-express-starter-app-blog/jobs/job.sh $APP_TOKEN
@@ -20,6 +22,8 @@ FROM node:${NODE_VERSION}-alpine
 # Use production node environment by default.
 ENV NODE_ENV=production
 
+ARG APP_PATH=app_demo
+ENV APP_PATH=$APP_PATH
 # add GIT for module installs through jobs
 RUN apk update && apk add git
 
@@ -35,8 +39,6 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
-
-RUN ./app_blog/jobs/job.sh
 
 # Run the application as a non-root user.
 USER node
