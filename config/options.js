@@ -57,14 +57,19 @@ module.exports = function (app, explicitConfig) {
         "public",
         app.locals.nodeEnv !== "production"
     )
-    app.locals.appTitle = getConfigValue(
-        "APP_TITLE",
+    app.locals.appName = getConfigValue(
+        "APP_NAME",
         "Node.js Express Starter",
         true
     )
     app.locals.appDescription = getConfigValue(
         "APP_DESCRIPTION",
-        "Node.js Express Starter",
+        "A perfect way to start your Node.js Express application",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.appKeywords = getConfigValue(
+        "APP_KEYWORDS",
+        "nodejs, express, starter",
         app.locals.nodeEnv !== "production"
     )
     app.locals.sessionSecret = getConfigValue(
