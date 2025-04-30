@@ -8,6 +8,13 @@ module.exports = function (app) {
         .filter(file => file.endsWith('.js'))
         .filter(file => file !== 'index.js') // Exclude index.js
 
+    app.use((req, res, next) => {
+        // Set the current path in the request object
+        req.currentPath = req.path
+        res.locals.render = {}
+        next()
+    })
+
     // Load and mount each router
     routerFiles.forEach(file => {
         const routeName = path.parse(file).name
