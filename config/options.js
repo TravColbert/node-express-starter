@@ -77,4 +77,9 @@ module.exports = function (app, explicitConfig) {
         "you should really change this",
         false
     )
+    app.locals.dbUrl = getConfigValue(
+        "DB_URL",
+        "mongodb://mongo/mydatabase",
+        app.locals.nodeEnv !== "production"
+    )
 }
