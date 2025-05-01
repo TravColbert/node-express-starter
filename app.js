@@ -79,6 +79,18 @@ module.exports = function (explicitConfig = {}) {
         }
 
         /**
+         * Set up a DB, if you want
+         */
+        const dbLoader = path.join(__dirname, 'config', 'db.js')
+        if (fs.existsSync(dbLoader)) {
+            try {
+                require(dbLoader)(app)
+            } catch (error) {
+                console.error(`Error setting up database connection:\n\t${error.message}`)
+            }
+        }
+
+        /**
          * Set up sessions
          */
         const sessionLoader = path.join(__dirname, 'config', 'sessions.js')
