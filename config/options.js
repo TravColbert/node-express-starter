@@ -17,6 +17,11 @@ module.exports = function (app, explicitConfig) {
         8080,
         app.locals.nodeEnv !== "production"
     )
+    app.locals.appList = getConfigValue(
+        "APP_LIST",
+        "app_base, app_demo",
+        true
+    )
     app.locals.appPath = getConfigValue(
         "APP_PATH",
         "app_demo",

@@ -117,7 +117,14 @@ module.exports = function (explicitConfig = {}) {
         /**
          * Serve static files
          */
-        app.use(express.static(path.join(__dirname, app.locals.appPath, app.locals.publicPath)))
+        const staticPathLoader = path.join(__dirname, 'config', 'static.js')
+        if (fs.existsSync(staticPathLoader)) {
+            try {
+                require(staticPathLoader)(app)
+            } catch (error) {
+                console.error(`Error setting up static files:\n\t${error.message}`)
+            }
+        }
 
         /**
          * Set up models

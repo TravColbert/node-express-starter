@@ -1,8 +1,6 @@
 'use strict'
 
 module.exports = function (app) {
-    app.locals.debug && console.debug('Loading greetings controller')
-
     return {
         index: function (req, res) {
             const greetingsCollection = req.query.lang ? app.locals.models['greetings'].find(req.query.lang) : app.locals.models['greetings'].all()
