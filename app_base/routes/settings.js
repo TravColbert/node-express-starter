@@ -29,7 +29,7 @@ module.exports = function (app) {
         .get((req, res) => {
             app.locals.debug && console.debug(`Got request for settings key: ${req.params.key}`)
             if (req.params.key in app.locals) {
-                res.json(app.locals[req.params.key])
+                return res.json(app.locals[req.params.key])
             }
             res.json({ error: "no configuration for that key" })
         })
