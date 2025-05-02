@@ -91,6 +91,18 @@ module.exports = function (explicitConfig = {}) {
         }
 
         /**
+         * Set up cache
+         */
+        const cacheLoader = path.join(__dirname, 'config', 'cache.js')
+        if (fs.existsSync(cacheLoader)) {
+            try {
+                require(cacheLoader)(app)
+            } catch (error) {
+                console.error(`Error setting up cache:\n\t${error.message}`)
+            }
+        }
+
+        /**
          * Set up middleware that is session-dependent
          */
         const middlewareLoader = path.join(__dirname, 'config', 'middleware.js')

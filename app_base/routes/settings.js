@@ -1,7 +1,13 @@
 const express = require("express")
 const router = express.Router({ mergeParams: true })
+const path = require('path')
 
 module.exports = function (app) {
+    const currentRouteName = path.basename(__filename, '.js')
+
+    // Require the controller with the same name as the router
+    const controller = require(path.join('../', app.locals.controllerPath, currentRouteName))(app)
+
     router.route("/hurl")
         .all((_req, res) => {
             /**
@@ -15,6 +21,9 @@ module.exports = function (app) {
             app.locals.debug && console.debug("Got request for routes")
             res.json(app._router.stack)
         })
+
+    router.route("/cache-test")
+        .get(controller.cacheTest)
 
     router.route("/:key")
         .get((req, res) => {

@@ -17,6 +17,11 @@ module.exports = function (app, explicitConfig) {
         8080,
         app.locals.nodeEnv !== "production"
     )
+    app.locals.cacheTtl = getConfigValue(
+        "CACHE_TTL",
+        60,
+        app.locals.nodeEnv !== "production"
+    )
     app.locals.appList = getConfigValue(
         "APP_LIST",
         "app_base, app_demo",
