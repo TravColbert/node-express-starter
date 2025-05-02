@@ -47,10 +47,18 @@ module.exports = function (app) {
      * If the express app has no "/" route then render the home page view
      */
     if (!app._router.stack.some(r => r.route && r.route.path === '/' && r.route.methods.get)) {
-        app.locals.debug && console.debug(`Mounting index (/) router as a : home view`)
-        app.use('/', (_req, res) => {
-            res.render('home')
-        })
+        app.locals.debug && console.debug(`No "/" route found, seeking default home view...`)
+        // Check each app instance for a home view
+        for (const appInstance of app.locals.appList.split(',')) {
+            const viewPath = path.join(__dirname, '../', appInstance.trim(), app.locals.viewPath, "home.pug")
+            if (fs.existsSync(viewPath)) {
+                app.locals.debug && console.debug(`Mounting ${viewPath} as home view`)
+                app.use('/', (_req, res) => {
+                    res.render(viewPath, { title: 'Home' })
+                })
+                break
+            }
+        }
     }
 
     /**
