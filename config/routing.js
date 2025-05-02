@@ -2,38 +2,53 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = function (app) {
-    // Get all .js files from router path
-    const routerPath = path.join(__dirname, '/..', app.locals.appPath, app.locals.routerPath)
-    const routerFiles = fs.readdirSync(routerPath)
-        .filter(file => file.endsWith('.js'))
-        .filter(file => file !== 'index.js') // Exclude index.js
+    for (const appInstance of app.locals.appList.split(',')) {
+        const routerPath = path.join(__dirname, '../', appInstance.trim(), app.locals.routerPath)
 
-    app.use((req, res, next) => {
-        // Set the current path in the request object
-        req.currentPath = req.path
-        res.locals.render = {}
-        next()
-    })
+        if (fs.existsSync(routerPath)) {
+            // Get all .js files from router path
+            const routerFiles = fs.readdirSync(routerPath)
+                .filter(file => file.endsWith('.js'))
+                .filter(file => file !== 'index.js') // Exclude index.js
 
-    // Load and mount each router
-    routerFiles.forEach(file => {
-        const routeName = path.parse(file).name
-        app.locals.debug && console.debug(`Mounting router: ${routeName}`)
-        const router = require(path.join(routerPath, file))(app)
-        app.use(`/${routeName}`, router)
-    })
+            app.use((req, res, next) => {
+                // Set the current path in the request object
+                req.currentPath = req.path
+                res.locals.render = {}
+                next()
+            })
+
+            // Load and mount each router
+            routerFiles.forEach(file => {
+                const routeName = path.parse(file).name
+                app.locals.debug && console.debug(`Mounting router: ${routeName}`)
+                const router = require(path.join(routerPath, file))(app)
+                app.use(`/${routeName}`, router)
+            })
+        }
+    }
 
     /**
      * Mount the index router
      * This is the default router that handles the root path
+     * The default router will be the first app instance with a router folder and an index.js file
      */
-    const indexRouterPath = path.join(routerPath, 'index.js')
-    if (fs.existsSync(indexRouterPath)) {
-        app.locals.debug && console.debug(`Mounting router: index`)
-        const indexRouter = require(path.join(routerPath, 'index'))(app)
-        app.use('/', indexRouter)
-    } else {
-        app.use('/', (req, res) => {
+    for (const appInstance of app.locals.appList.split(',')) {
+        const routerPath = path.join(__dirname, '../', appInstance.trim(), app.locals.routerPath, "index.js")
+        if (fs.existsSync(routerPath)) {
+            app.locals.debug && console.debug(`Mounting index (/) route from ${appInstance.trim()}`)
+            const indexRouter = require(routerPath)(app)
+            app.use('/', indexRouter)
+            break
+        }
+    }
+
+    /**
+     * If the express app has no "/" route then render the home page view
+     */
+    if (!app._router.stack.some(r => r.route && r.route.path === '/' && r.route.methods.get)) {
+        app.locals.debug && console.debug(`Mounting index (/) router as a : home view`)
+        app.use('/', (_req, res) => {
             res.render('home')
         })
     }
