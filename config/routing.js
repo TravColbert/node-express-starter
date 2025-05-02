@@ -53,7 +53,7 @@ module.exports = function (app) {
             const viewPath = path.join(__dirname, '../', appInstance.trim(), app.locals.viewPath, "home.pug")
             if (fs.existsSync(viewPath)) {
                 app.locals.debug && console.debug(`Mounting ${viewPath} as home view`)
-                app.use('/', (_req, res) => {
+                app.get('/', (_req, res) => {
                     res.render(viewPath, { title: 'Home' })
                 })
                 break
