@@ -6,10 +6,10 @@ module.exports = function (app) {
         cache = new NodeCache({ stdTTL: app.locals.cacheTtl || 60 }) // If unset expires after 60 secs
     }
 
-    app.locals.cache = async function (key, func) {
+    app.locals.cache = function (key, func) {
         if (!cache) {
             app.locals.debug && console.debug("Cache is not enabled")
-            return await func()
+            return func()
         }
 
         app.locals.debug && console.log("Cache is initialized, checking for value...")
@@ -18,7 +18,7 @@ module.exports = function (app) {
 
         if (value == undefined) {
             app.locals.debug && console.log("Cache miss, setting value")
-            const slowValue = await func()
+            const slowValue = func()
             cache.set(key, slowValue)
             return slowValue
         } else {
