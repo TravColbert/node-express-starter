@@ -9,7 +9,7 @@ module.exports = function (app) {
     const controller = require(path.join('../', app.locals.controllerPath, currentRouteName))(app)
 
     router.route("/hurl")
-        .all((_req, res) => {
+        .all((_req, _res) => {
             /**
              * fire an error event
              */
