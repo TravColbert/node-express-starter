@@ -2,6 +2,14 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = function (app) {
+    app.use((req, res, next) => {
+        // check for htmx request
+        if (!req.headers['hx-request']) {
+            res.locals.fullPage = true
+        }
+        return next()
+    })
+
     for (const appInstance of app.locals.appList.split(',')) {
         const routerPath = path.join(__dirname, '../', appInstance.trim(), app.locals.routerPath)
 
