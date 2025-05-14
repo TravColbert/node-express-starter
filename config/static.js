@@ -9,5 +9,10 @@ module.exports = function (app) {
       app.locals.debug && console.debug(`Configuring default static files location for: ${appInstance} - ${location}`)
       app.use(express.static(location))
     }
+    // load app-level config
+    const appConfig = path.join(__dirname, '../', appInstance.trim(), 'config', 'static.js')
+    if (fs.existsSync(appConfig)) {
+      require(appConfig)(app)
+    }
   }
 }
