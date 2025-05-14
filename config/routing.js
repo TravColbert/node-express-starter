@@ -1,14 +1,29 @@
 const fs = require('fs')
 const path = require('path')
 
+
 module.exports = function (app) {
-    app.use((req, res, next) => {
+    const setRenderObject = function (req, res, next) {
+        res.locals.render = {}
+        return next()
+    }
+
+    const detectHtmxRequest = function (req, res, next) {
+        app.locals.debug && console.debug('Detecting HTMX request')
         // check for htmx request
         if (!req.headers['hx-request']) {
             res.locals.fullPage = true
         }
         return next()
-    })
+    }
+
+    const setAppName = function (req, res, next) {
+        app.locals.debug && console.debug('Setting appName')
+        res.locals.render.appName = app.locals.appName || pkg?.name || 'Node.js Express Mongoose Starter'
+        return next()
+    }
+
+    app.use([setRenderObject, setAppName, detectHtmxRequest])
 
     for (const appInstance of app.locals.appList.split(',')) {
         const routerPath = path.join(__dirname, '../', appInstance.trim(), app.locals.routerPath)
@@ -22,7 +37,6 @@ module.exports = function (app) {
             app.use((req, res, next) => {
                 // Set the current path in the request object
                 req.currentPath = req.path
-                res.locals.render = {}
                 next()
             })
 
