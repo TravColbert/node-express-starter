@@ -1,4 +1,5 @@
 const helmet = require("helmet")
+const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const compression = require('compression')
@@ -16,6 +17,7 @@ module.exports = function (app) {
       objectSrc: ["'none'"],
     }
   }))
+  app.use(morgan(app.locals.nodeEnv == "development" ? 'dev' : 'combined'))
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(cookieParser())
