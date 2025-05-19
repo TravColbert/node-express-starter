@@ -6,15 +6,17 @@ const compression = require('compression')
 const { rateLimit } = require('express-rate-limit')
 
 module.exports = function (app) {
-  app.use(helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'script-src-elem'"],
-      scriptSrc: ["'self'", "https://unpkg.com"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      styleSrcElem: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:"],
-      objectSrc: ["'none'"],
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'script-src-elem'"],
+        scriptSrc: ["'self'", "https://unpkg.com"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        styleSrcElem: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:"],
+        objectSrc: ["'none'"],
+      }
     }
   }))
   app.use(morgan(app.locals.nodeEnv == "development" ? 'dev' : 'combined'))
