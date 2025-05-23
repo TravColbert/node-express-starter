@@ -27,6 +27,11 @@ module.exports = function (app, explicitConfig) {
         60,
         app.locals.nodeEnv !== "production"
     )
+    app.locals.lang = getConfigValue(
+        "APP_LANG",
+        "en",
+        app.locals.nodeEnv !== "production"
+    )
     app.locals.appList = getConfigValue(
         "APP_LIST",
         "app_base, app_demo",

@@ -23,7 +23,13 @@ module.exports = function (app) {
         return next()
     }
 
-    app.use([setRenderObject, setAppName, detectHtmxRequest])
+    const setAppLang = function (req, res, next) {
+        app.locals.debug && console.debug(`Setting appLang: ${app.locals.lang}`)
+        res.locals.render.lang = app.locals.lang || 'en'
+        return next()
+    }
+
+    app.use([setRenderObject, setAppLang, setAppName, detectHtmxRequest])
 
     for (const appInstance of app.locals.appList.split(',')) {
         const routerPath = path.join(__dirname, '../', appInstance.trim(), app.locals.routerPath)
