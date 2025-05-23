@@ -18,4 +18,11 @@ module.exports = function (app) {
       require(appConfig)(app)
     }
   }
+
+  // Finally, add the framework-wide static location
+  const frameworkLocation = path.join(__dirname, '..', app.locals.publicPath)
+  if (fs.existsSync(frameworkLocation)) {
+    app.locals.debug && console.debug(`Configuring default static files location for: framework - ${frameworkLocation}`)
+    app.use(express.static(frameworkLocation))
+  }
 }
