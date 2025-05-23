@@ -1,0 +1,11 @@
+doctype html
+html(lang=lang || 'en')
+  include _includes/head.pug
+  body.layout
+    header
+      include _includes/header.pug
+    main.centered-layout
+      block content
+    footer.footer
+      include _includes/footer.pug
+  include _includes/foot.pug
