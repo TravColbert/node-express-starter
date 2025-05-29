@@ -23,7 +23,14 @@ module.exports = function (app) {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(cookieParser())
-  app.use(compression())
+
+  // Enable compression if not explicitly disabled
+  if (!app.locals.noCompression) {
+    app.use(compression())
+    app.locals.debug && console.debug('✅  Compression is enabled')
+  } else {
+    app.locals.debug && console.debug('⚠️  Compression is disabled!')
+  }
 
   if (app.locals.rateLimitFifteenMinuteWindow > 0) {
     const limiter = rateLimit({
@@ -33,8 +40,8 @@ module.exports = function (app) {
       legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     })
     app.use(limiter)
-    app.locals.debug && console.debug(`Rate limiting is enabled: ${app.locals.rateLimitFifteenMinuteWindow} requests per 15 minutes`)
+    app.locals.debug && console.debug(`✅  Rate limiting is enabled: ${app.locals.rateLimitFifteenMinuteWindow} requests per 15 minutes`)
   } else {
-    app.locals.debug && console.debug(`Rate limiting is disabled`)
+    app.locals.debug && console.debug(`⚠️  Rate limiting is disabled`)
   }
 }

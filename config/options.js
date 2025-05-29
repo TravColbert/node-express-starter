@@ -17,6 +17,11 @@ module.exports = function (app, explicitConfig) {
         8080,
         app.locals.nodeEnv !== "production"
     )
+    app.locals.noCompression = getConfigValue(
+        "NO_COMPRESSION",
+        false,
+        app.locals.nodeEnv !== "production"
+    )
     app.locals.rateLimitFifteenMinuteWindow = getConfigValue(
         "RATE_LIMIT_15_MINUTE_WINDOW",
         0,
