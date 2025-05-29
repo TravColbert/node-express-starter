@@ -20,7 +20,8 @@ module.exports = function (app) {
     }
   }))
   app.use(morgan(app.locals.nodeEnv == "development" ? 'dev' : 'combined'))
-  app.use(bodyParser.json())
+  // Use bodyParses.json() if you need to parse JSON bodies. In a POST for example.
+  // app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
   app.use(cookieParser())
 
