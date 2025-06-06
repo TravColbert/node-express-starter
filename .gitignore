@@ -10,3 +10,5 @@ app_*/
 !app_demo/
 !app_base/
 *.notinuse
+.nyc_output
+coverage
