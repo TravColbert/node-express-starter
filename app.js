@@ -44,7 +44,7 @@ module.exports = function (explicitConfig = {}) {
      *
      * The process.env and config files are merged into the app.locals.
      */
-    require("dotenv").config()
+    if (explicitConfig.IMPORT_ENV !== false) require("dotenv").config()
     const fs = require('fs')
     const path = require("path")
     const express = require("express")
