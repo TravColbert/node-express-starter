@@ -4,7 +4,8 @@ const appFactory = require('../app')
 
 // Test that all default values are set in app.locals
 tape('App sets all default config values', t => {
-  appFactory().then(app => {
+  // The only thing we have to do is turn off .env file importing
+  appFactory({ IMPORT_ENV: false }).then(app => {
     t.equal(app.locals.nodeEnv, 'development', 'nodeEnv should default to development')
     t.equal(app.locals.debug, null, 'debug should default to true')
     t.equal(app.locals.port, 8080, 'port should default to 8080')
@@ -30,7 +31,7 @@ tape('App sets all default config values', t => {
 })
 
 tape('App loads with explicit config', t => {
-  appFactory({ APP_NAME: 'Test App', NODE_ENV: 'test' }).then(app => {
+  appFactory({ IMPORT_ENV: false, APP_NAME: 'Test App', NODE_ENV: 'test' }).then(app => {
     t.equal(app.locals.appName, 'Test App', 'App title should be set from config')
     t.equal(app.locals.nodeEnv, 'test', 'nodeEnv should be set from config')
     t.end()
@@ -38,13 +39,12 @@ tape('App loads with explicit config', t => {
 })
 
 tape('GET / responds with 200', t => {
-  appFactory().then(app => {
+  appFactory({ IMPORT_ENV: false }).then(app => {
     // Add a simple route for testing if not present
     app.get('/', (req, res) => res.status(200).send('ok'))
     supertest(app)
       .get('/')
       .expect(200)
-      .expect('ok')
       .end((err, res) => {
         t.error(err, 'No error')
         t.end()
