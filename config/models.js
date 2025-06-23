@@ -5,7 +5,7 @@ module.exports = function (app) {
     app.locals.models = []
 
     for (const appInstance of app.locals.appList.split(',')) {
-        const modelPath = path.join(__dirname, '../', appInstance.trim(), app.locals.modelPath)
+        const modelPath = path.join(__dirname, app.locals.basePath, appInstance.trim(), app.locals.modelPath)
 
         if (fs.existsSync(modelPath)) {
             // Get all .js files from model path

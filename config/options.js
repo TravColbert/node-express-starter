@@ -39,22 +39,32 @@ module.exports = function (app, explicitConfig) {
     )
     app.locals.appList = getConfigValue(
         "APP_LIST",
-        "app_base, app_demo",
+        "app_base",
         true
     )
-    app.locals.appPath = getConfigValue(
-        "APP_PATH",
-        "app_demo",
+    app.locals.basePath = getConfigValue(
+        "BASE_PATH",
+        "..",
         true
-    )
-    app.locals.routerPath = getConfigValue(
-        "ROUTER_PATH",
-        "routes",
-        app.locals.nodeEnv !== "production"
     )
     app.locals.configPath = getConfigValue(
         "CONFIG_PATH",
         "config",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.publicPath = getConfigValue(
+        "PUBLIC_PATH",
+        "public",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.modelPath = getConfigValue(
+        "MODEL_PATH",
+        "models",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.routerPath = getConfigValue(
+        "ROUTER_PATH",
+        "routes",
         app.locals.nodeEnv !== "production"
     )
     app.locals.viewPath = getConfigValue(
@@ -67,19 +77,9 @@ module.exports = function (app, explicitConfig) {
         "controllers",
         app.locals.nodeEnv !== "production"
     )
-    app.locals.modelPath = getConfigValue(
-        "MODEL_PATH",
-        "models",
-        app.locals.nodeEnv !== "production"
-    )
     app.locals.helperPath = getConfigValue(
         "HELPER_PATH",
         "helpers",
-        app.locals.nodeEnv !== "production"
-    )
-    app.locals.publicPath = getConfigValue(
-        "PUBLIC_PATH",
-        "public",
         app.locals.nodeEnv !== "production"
     )
     app.locals.appName = getConfigValue(
