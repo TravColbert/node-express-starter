@@ -49,5 +49,5 @@ tape('GET / responds with 200', t => {
         t.error(err, 'No error')
         t.end()
       })
-  })
+  }).catch(err => t.fail(err))
 })
