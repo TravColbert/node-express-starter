@@ -79,7 +79,7 @@ module.exports = function (app) {
      * If the express app has no "/" route then render the home page view
      */
     if (!app._router.stack.some(r => r.route && r.route.path === '/' && r.route.methods.get)) {
-        app.locals.debug && console.debug(`No "/" route found, seeking default home view...`)
+        app.locals.debug && console.info(`No "/" route found, seeking default home view...`)
         // Check each app instance for a home view
         for (const appInstance of app.locals.appList.split(',')) {
             const viewPath = path.join(__dirname, app.locals.basePath, appInstance.trim(), app.locals.viewPath, "home.pug")
@@ -89,6 +89,11 @@ module.exports = function (app) {
                     res.render(viewPath, { title: 'Home' })
                 })
                 break
+            } else {
+                app.get('/', (_req, res) => {
+                    console.warn(`No home view found for ${appInstance.trim()}, using default response.`)
+                    res.send('It works!')
+                })
             }
         }
     }
