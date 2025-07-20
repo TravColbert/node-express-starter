@@ -54,7 +54,7 @@ module.exports = function (app) {
             routerFiles.forEach(file => {
                 const routeName = path.parse(file).name
                 app.locals.debug && console.debug(`Mounting router: ${routeName}`)
-                const router = require(path.join(routerPath, file))(app)
+                const router = require(path.join(routerPath, file))(app, appInstance.trim())
                 app.use(`/${routeName}`, router)
             })
         }
@@ -69,7 +69,7 @@ module.exports = function (app) {
         const routerPath = path.join(__dirname, app.locals.basePath, appInstance.trim(), app.locals.routerPath, "index.js")
         if (fs.existsSync(routerPath)) {
             app.locals.debug && console.debug(`Mounting index (/) route from ${appInstance.trim()}`)
-            const indexRouter = require(routerPath)(app)
+            const indexRouter = require(routerPath)(app, appInstance.trim())
             app.use('/', indexRouter)
             break
         }
