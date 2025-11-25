@@ -2,18 +2,18 @@ const tape = require('tape')
 const supertest = require('supertest')
 const appFactory = require('../app')
 const testConfig = {
-  IMPORT_ENV: false,
+  IMPORT_ENV: false,      // Do not import from .env file through the dotenv package
   NODE_ENV: 'test',
   BASE_PATH: '../test',
   APP_LIST: 'app_test'
 }
 
-tape('GET / responds with 200', t => {
+tape('GET / responds with 200 and Hello World!', t => {
   appFactory(testConfig).then(app => {
     // Add a simple route for testing if not present
     supertest(app)
       .get('/')
-      .expect(200, 'It works!')
+      .expect(200, 'Hello World!')  // Responds with the ultra-fallback success response
       .end((err, res) => {
         if (err) {
           t.error(err, 'Got error: ' + err)
