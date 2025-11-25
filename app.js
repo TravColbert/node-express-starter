@@ -17,6 +17,10 @@ module.exports = function (explicitConfig = {}) {
      * appFactory, like this:
      *
      *   appFactory({ APP_TITLE: 'Sample App' })
+     * 
+     * You can pass an explicit config to Zest by command-line too, like this:
+     *
+     *   node server.js '{"APP_TITLE":"Sample App"}'
      *
      * Otherwise, we look to Node's process.env property to configure itself.
      * There are 2 ways you can set the process.env property: shell or .env file.
@@ -44,7 +48,7 @@ module.exports = function (explicitConfig = {}) {
      *
      * The process.env and config files are merged into the app.locals.
      */
-    if (explicitConfig.IMPORT_ENV !== false) require("dotenv").config()
+    if (explicitConfig.hasOwnProperty('IMPORT_ENV') && explicitConfig.IMPORT_ENV !== false) require("dotenv").config()
     const fs = require('fs')
     const path = require("path")
     const express = require("express")
