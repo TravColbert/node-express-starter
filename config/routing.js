@@ -1,3 +1,4 @@
+const { error } = require('console')
 const fs = require('fs')
 const path = require('path')
 
@@ -31,8 +32,27 @@ module.exports = function (app) {
         return next()
     }
 
+    const notFoundHandler = function (req, res, _next) {
+        res.status(404).render('errors/404')
+    }
+
+    const errorHandler = function (err, _req, res, _next) {
+        console.dir(err.message)
+        var errorMessage = {
+            message: err.message
+        }
+        if (app.locals.debug) {
+            console.dir(err.stack)
+            errorMessage.stack = err.stack
+        }
+        res.status(500).render('errors/500', { error: errorMessage })
+    }
+
     app.use([setRenderObject, setAppLang, setAppName, detectHtmxRequest])
 
+    /**
+     * Dynamically load all routers from each app instance
+     */
     for (const appInstance of app.locals.appList.split(',')) {
         const routerPath = path.join(__dirname, app.locals.basePath, appInstance.trim(), app.locals.routerPath)
 
@@ -57,18 +77,21 @@ module.exports = function (app) {
                 const router = require(path.join(routerPath, file))(app, appInstance.trim())
                 app.use(`/${routeName}`, router)
             })
+        } else {
+            app.locals.debug && console.debug(`\tNo router found at path: ${routerPath}`)
         }
     }
 
     /**
      * Mount the index router
      * This is the default router that handles the root path
-     * The default router will be the first app instance with a router folder and an index.js file
+     * The default router will be the first app instance with a router folder
+     * and an index.js file
      */
     for (const appInstance of app.locals.appList.split(',')) {
         const routerPath = path.join(__dirname, app.locals.basePath, appInstance.trim(), app.locals.routerPath, "index.js")
         if (fs.existsSync(routerPath)) {
-            app.locals.debug && console.debug(`Mounting index (/) route from ${appInstance.trim()}`)
+            app.locals.debug && console.debug(`Mounting index(/) route from ${appInstance.trim()} `)
             const indexRouter = require(routerPath)(app, appInstance.trim())
             app.use('/', indexRouter)
             break
@@ -92,7 +115,7 @@ module.exports = function (app) {
             } else {
                 app.get('/', (_req, res) => {
                     console.warn(`No home view found for ${appInstance.trim()}, using default response.`)
-                    res.send('It works!')
+                    res.send('Hello World!')
                 })
             }
         }
@@ -101,22 +124,10 @@ module.exports = function (app) {
     /**
      * Default error handling
      */
-    app.use((err, _req, res, _next) => {
-        console.dir(err.message)
-        var errorMessage = {
-            message: err.message
-        }
-        if (app.locals.debug) {
-            console.dir(err.stack)
-            errorMessage.stack = err.stack
-        }
-        res.status(500).render('errors/500', { error: errorMessage })
-    })
+    app.use(errorHandler)
 
     /**
      * 404 not found route
      */
-    app.use((_req, res) => {
-        res.status(404).render('errors/404')
-    })
+    app.use(notFoundHandler)
 }
