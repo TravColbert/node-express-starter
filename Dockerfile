@@ -12,8 +12,10 @@ ARG NODE_VERSION=22.14.0
 FROM alpine/git AS app_blog
 ARG APP_TOKEN=bogus
 ENV APP_TOKEN=$APP_TOKEN
+ARG APP_RELEASE=v0.9
+ENV APP_RELEASE=$APP_RELEASE
 WORKDIR /app
-RUN git clone https://github.com/TravColbert/node-express-starter-app-blog.git
+RUN git clone --branch $APP_RELEASE --single-branch https://github.com/TravColbert/node-express-starter-app-blog.git
 RUN sh ./node-express-starter-app-blog/jobs/job.sh $APP_TOKEN
 
 # The base layer stage
