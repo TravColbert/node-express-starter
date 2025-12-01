@@ -44,7 +44,7 @@ module.exports = function (app, explicitConfig) {
     )
     app.locals.basePath = getConfigValue(
         "BASE_PATH",
-        "..",
+        ".",
         true
     )
     app.locals.configPath = getConfigValue(
