@@ -4,7 +4,7 @@ const appFactory = require('../app')
 const testConfig = {
   IMPORT_ENV: false,      // Do not import from .env file through the dotenv package
   NODE_ENV: 'test',
-  BASE_PATH: '../test',
+  BASE_PATH: 'test',
   APP_LIST: 'app_test'
 }
 
@@ -39,7 +39,7 @@ tape('GET /bogus responds with 404', t => {
 })
 
 tape('Set BASE_PATH reaches test app', t => {
-  appFactory(testConfig).then(app => {
+  appFactory({ ...testConfig, "DEBUG": true }).then(app => {
     // Add a simple route for testing if not present
     supertest(app)
       .get('/test')

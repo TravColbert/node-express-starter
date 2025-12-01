@@ -9,7 +9,7 @@ tape('App sets all default config values', t => {
   // The only thing we have to do is turn off .env file importing
   appFactory(testConfig).then(app => {
     t.equal(app.locals.nodeEnv, 'development', 'nodeEnv should default to development')
-    t.equal(app.locals.debug, null, 'debug should default to true')
+    t.equal(app.locals.debug, null, 'debug should default to null')
     t.equal(app.locals.port, 8080, 'port should default to 8080')
     t.equal(app.locals.noCompression, false, 'noCompression should default to false')
     t.equal(app.locals.rateLimitFifteenMinuteWindow, 0, 'rateLimitFifteenMinuteWindow should default to 0')
