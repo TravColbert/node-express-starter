@@ -17,8 +17,8 @@ FROM node:${NODE_VERSION}-alpine
 
 # Use production node environment by default.
 ENV NODE_ENV=production
-ARG APP_PATH=app_demo
-ENV APP_PATH=$APP_PATH
+ARG APP_LIST=app_demo
+# ENV APP_LIST=$APP_LIST
 
 WORKDIR /usr/src/app
 
