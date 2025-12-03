@@ -39,12 +39,12 @@ module.exports = function (app, explicitConfig) {
     )
     app.locals.appList = getConfigValue(
         "APP_LIST",
-        "app_base",
+        "app",
         true
     )
     app.locals.basePath = getConfigValue(
         "BASE_PATH",
-        "..",
+        ".",
         true
     )
     app.locals.configPath = getConfigValue(

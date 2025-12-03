@@ -1,32 +1,45 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
-
 ARG NODE_VERSION=22.14.0
 
-# Stage the app_blog module 
-FROM alpine/git AS app_blog
-ARG APP_TOKEN=bogus
-ENV APP_TOKEN=$APP_TOKEN
+# Stage the app module 
+FROM alpine/git AS app
+
+# Vars available in the *build* stage
+ARG APP_TOKEN
+# ARG APP_LIST
+ARG APP_RELEASE
+ARG APP_REPO
+
+# vars passed onto the runtime stage
+# ENV APP_TOKEN=$APP_TOKEN
+# ENV APP_LIST=$APP_LIST
+# ENV APP_RELEASE=$APP_RELEASE
+
 WORKDIR /app
-RUN git clone https://github.com/TravColbert/node-express-starter-app-blog.git
-RUN sh ./node-express-starter-app-blog/jobs/job.sh $APP_TOKEN
+RUN git clone --branch $APP_RELEASE --single-branch $APP_REPO ./
+RUN sh ./jobs/job.sh $APP_TOKEN
+# Finshed staging the app module
 
 # The base layer stage
 FROM node:${NODE_VERSION}-alpine
 
-# Use production node environment by default.
+ARG APP_NAME
+ARG APP_DESCRIPTION
+
+ENV APP_NAME=$APP_NAME
+ENV APP_DESCRIPTION=$APP_DESCRIPTION
+
+# Vars available in the *build* stage
+# ARG APP_LIST
+
+# Vars available in the *build* stage
 ENV NODE_ENV=production
-ARG APP_PATH=app_demo
-ENV APP_PATH=$APP_PATH
+# ENV APP_LIST=$APP_LIST
 
 WORKDIR /usr/src/app
 
-COPY --from=app_blog /app/node-express-starter-app-blog ./app_blog
+COPY --from=app /app ./app
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.

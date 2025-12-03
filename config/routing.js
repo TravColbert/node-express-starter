@@ -54,7 +54,8 @@ module.exports = function (app) {
      * Dynamically load all routers from each app instance
      */
     for (const appInstance of app.locals.appList.split(',')) {
-        const routerPath = path.join(__dirname, app.locals.basePath, appInstance.trim(), app.locals.routerPath)
+        // Since we're currently in config/, we need to go up one level to __dirname
+        const routerPath = path.join(__dirname, "..", app.locals.basePath, appInstance.trim(), app.locals.routerPath)
 
         app.locals.debug && console.debug(`\tChecking router path: ${routerPath}...`)
 
@@ -89,7 +90,7 @@ module.exports = function (app) {
      * and an index.js file
      */
     for (const appInstance of app.locals.appList.split(',')) {
-        const routerPath = path.join(__dirname, app.locals.basePath, appInstance.trim(), app.locals.routerPath, "index.js")
+        const routerPath = path.join(__dirname, "..", app.locals.basePath, appInstance.trim(), app.locals.routerPath, "index.js")
         if (fs.existsSync(routerPath)) {
             app.locals.debug && console.debug(`Mounting index(/) route from ${appInstance.trim()} `)
             const indexRouter = require(routerPath)(app, appInstance.trim())
@@ -105,7 +106,7 @@ module.exports = function (app) {
         app.locals.debug && console.info(`No "/" route found, seeking default home view...`)
         // Check each app instance for a home view
         for (const appInstance of app.locals.appList.split(',')) {
-            const viewPath = path.join(__dirname, app.locals.basePath, appInstance.trim(), app.locals.viewPath, "home.pug")
+            const viewPath = path.join(__dirname, "..", app.locals.basePath, appInstance.trim(), app.locals.viewPath, "home.pug")
             if (fs.existsSync(viewPath)) {
                 app.locals.debug && console.debug(`Mounting ${viewPath} as home view`)
                 app.get('/', (_req, res) => {
