@@ -22,7 +22,7 @@ module.exports = function (app) {
 
     const setAppName = function (req, res, next) {
         app.locals.debug && console.debug('Setting appName')
-        res.locals.render.appName = app.locals.appName || pkg?.name || 'Node.js Express Mongoose Starter'
+        res.locals.render.appName = app.locals.appName || 'Node.js Express Mongoose Starter'
         return next()
     }
 
