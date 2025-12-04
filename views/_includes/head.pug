@@ -2,9 +2,9 @@ head(lang=lang || "en", itemscope="itemscope", itemtype="http://schema.org/WebSi
   meta(charset="utf-8")
   meta(name="viewport", content="width=device-width,initial-scale=1")
 
-  - var appName = appName || pkg?.name || 'Node.js Express Mongoose Starter'
-  - var description = [(appDescription || pkg?.description || 'Node.js Express Mongoose Starter'), description].filter(element => { return (element || element?.trim() != "")}).join(' - ')
-  - var keywords = [keywords, (appKeywords || pkg?.keywords || "nodejs, express, starter")].join(', ')
+  - var appName = appName || 'Node.js Express Mongoose Starter'
+  - var description = [(appDescription || 'Node.js Express Mongoose Starter'), description].filter(element => { return (element || element?.trim() != "")}).join(' - ')
+  - var keywords = [keywords, (appKeywords || "nodejs, express, starter")].join(', ')
   - var title = appName + ' :: ' + title
 
   title= title
