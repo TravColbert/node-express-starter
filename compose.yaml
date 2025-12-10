@@ -12,10 +12,11 @@ services:
     build:
       context: .
       args:
-        - APP_TOKEN=${APP_TOKEN:-bogus}
+        # - APP_TOKEN=${APP_TOKEN:-bogus}
         - APP_LIST=${APP_LIST:-app}
         - APP_RELEASE=${APP_RELEASE:-latest}
         - APP_REPO=${APP_REPO:-https://github.com/TravColbert/node-express-starter-app-demo.git}
+        - APP_SOURCE_REPO=${APP_SOURCE_REPO:-''}
         - APP_NAME=${APP_NAME:-myapp}
         - APP_DESCRIPTION=${APP_DESCRIPTION:-'My Application'}
     environment:
