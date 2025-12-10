@@ -2,9 +2,9 @@
 
 const appFactory = require('./app')
 
-// Get optional JSON string from command line argument
 let config = null
 
+// Get optional JSON string from command line argument
 if (process.argv[2]) {
   try {
     config = JSON.parse(process.argv[2]);

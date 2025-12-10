@@ -6,10 +6,11 @@ ARG NODE_VERSION=22.14.0
 FROM alpine/git AS app
 
 # Vars available in the *build* stage
-ARG APP_TOKEN
+# ARG APP_TOKEN
 # ARG APP_LIST
 ARG APP_RELEASE
 ARG APP_REPO
+ARG APP_SOURCE_REPO
 
 # vars passed onto the runtime stage
 # ENV APP_TOKEN=$APP_TOKEN
@@ -18,7 +19,7 @@ ARG APP_REPO
 
 WORKDIR /app
 RUN git clone --branch $APP_RELEASE --single-branch $APP_REPO ./
-RUN sh ./jobs/job.sh $APP_TOKEN
+RUN sh ./jobs/job.sh $APP_SOURCE_REPO
 # Finshed staging the app module
 
 # The base layer stage
