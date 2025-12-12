@@ -23,6 +23,8 @@ module.exports = function (app) {
         viewPaths = viewPaths.concat(path.join(__dirname, '..', app.locals.viewPath))
     }
 
+    app.locals.debug && console.debug(`Final view paths: ${viewPaths.join(', ')}`)
+
     app.set('views', viewPaths)
 
     app.set('view engine', 'pug')

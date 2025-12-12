@@ -4,10 +4,10 @@ module.exports = function (app) {
     return {
         index: function (req, res) {
             const greetingsCollection = req.query.lang ? app.locals.models['greetings'].find(req.query.lang) : app.locals.models['greetings'].all()
-            res.render('greetings/index', { greetings: greetingsCollection })
+            res.render('index', { greetings: greetingsCollection })
         },
         new: function (req, res) {
-            res.render('greetings/new')
+            res.render('new')
         },
         create: function (req, res) {
             const newGreeting = {
@@ -19,7 +19,7 @@ module.exports = function (app) {
             const insertedGreetingId = app.locals.models['greetings'].create(newGreeting)
 
             if (!insertedGreetingId) {
-                return res.status(400).render('greetings/new', {
+                return res.status(400).render('new', {
                     errors: [
                         {
                             error: `A greeting in ${newGreeting.lang} already exists`
@@ -38,7 +38,7 @@ module.exports = function (app) {
             const greeting = app.locals.models['greetings'].find(req.params.id)
 
             if (greeting) {
-                return res.render('greetings/show', { greeting })
+                return res.render('show', { greeting })
             }
 
             res.status(404).render('errors/404')
@@ -48,7 +48,7 @@ module.exports = function (app) {
             if (!greeting) {
                 return res.status(404).render('errors/404')
             }
-            res.render('greetings/edit', { greeting })
+            res.render('edit', { greeting })
         },
         update: function (req, res) {
             const updatedGreeting = {
@@ -59,7 +59,7 @@ module.exports = function (app) {
             const updatedGreetingId = app.locals.models['greetings'].update(updatedGreeting)
 
             if (!updatedGreetingId) {
-                return res.status(400).render('greetings/new', {
+                return res.status(400).render('new', {
                     errors: [
                         {
                             error: `Could not update greeting`
