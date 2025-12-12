@@ -6,10 +6,9 @@ module.exports = function (app, explicitConfig) {
         "development",
         true
     )
-    // setting debug to null will disable it
     app.locals.debug = getConfigValue(
         "DEBUG",
-        null,
+        app.locals.nodeEnv !== "production",
         app.locals.nodeEnv !== "production"
     )
     app.locals.port = getConfigValue(
