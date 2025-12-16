@@ -22,7 +22,7 @@ module.exports = function (app) {
 
     router.route("/")
         .get((_req, res) => {
-            console.debug("In settings route...")
+            app.locals.debug && console.debug("In settings route...")
             res.json(app.locals)
         })
 

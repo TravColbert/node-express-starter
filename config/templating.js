@@ -4,7 +4,8 @@ const path = require('path')
 module.exports = function (app) {
     app.set('view options', { compileDebug: false })
 
-    let viewPaths = app.locals.appList.split(',').map(appInstance => {
+    const templateLocations = [...app.locals.appList.split(','), "app_base"]
+    let viewPaths = templateLocations.map(appInstance => {
         const viewPath = path.join(__dirname, "..", app.locals.basePath, appInstance.trim(), app.locals.viewPath)
 
         app.locals.debug && console.debug(`Attempting load of view path: ${viewPath}...`)

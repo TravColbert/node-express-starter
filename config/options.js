@@ -101,4 +101,33 @@ module.exports = function (app, explicitConfig) {
         "you should really change this",
         false
     )
+
+    // Now, let's load options from available app modules:
+    const appInstances = [...app.locals.appList.split(','), 'app_base']
+
+    for (const appInstance of appInstances) {
+        const optionsPath = require('path').join(
+            __dirname,
+            "..",
+            app.locals.basePath,
+            appInstance.trim(),
+            app.locals.configPath,
+            "options.js"
+        )
+        try {
+            const appOptions = require(optionsPath)(app, explicitConfig)
+            app.locals.debug && console.debug(`✅\tLoaded options for ${appInstance.trim()} from ${optionsPath}`)
+            // Merge options into app.locals
+            for (const [key, value] of Object.entries(appOptions)) {
+                app.locals[key] = value
+                app.locals.debug && console.debug(`\t• Set app.locals.${key} = ${JSON.stringify(value)}`)
+            }
+        } catch (err) {
+            if (err.code === 'MODULE_NOT_FOUND') {
+                app.locals.debug && console.debug(`⚠️ \tNo options file found for ${appInstance.trim()} at ${optionsPath}, skipping...`)
+            } else {
+                console.error(`❌\tError loading options for ${appInstance.trim()} from ${optionsPath}:`, err)
+            }
+        }
+    }
 }

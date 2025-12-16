@@ -12,6 +12,7 @@ module.exports = function (app) {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'", "'script-src-elem'"],
         scriptSrc: ["'self'", "https://unpkg.com"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         styleSrcElem: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", "data:"],
