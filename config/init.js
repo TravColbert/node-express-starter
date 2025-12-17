@@ -10,12 +10,10 @@ module.exports = function (app) {
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'script-src-elem'"],
-        scriptSrc: ["'self'", "https://unpkg.com"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'", "'script-src-elem'", "https://unpkg.com", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         styleSrcElem: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:"],
+        imgSrc: ["'self'", "data:", "https://picsum.photos", "https://fastly.picsum.photos"],
         objectSrc: ["'none'"],
       }
     }
