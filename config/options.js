@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = function (app, explicitConfig) {
     const getConfigValue = require('../lib/tools')(explicitConfig)
 
@@ -13,7 +15,7 @@ module.exports = function (app, explicitConfig) {
     )
     app.locals.port = getConfigValue(
         "PORT",
-        8080,
+      8443,
         app.locals.nodeEnv !== "production"
     )
     app.locals.noCompression = getConfigValue(
@@ -49,6 +51,11 @@ module.exports = function (app, explicitConfig) {
     app.locals.configPath = getConfigValue(
         "CONFIG_PATH",
         "config",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.tlsPath = getConfigValue(
+        "TLS_PATH",
+        "tls",
         app.locals.nodeEnv !== "production"
     )
     app.locals.publicPath = getConfigValue(
@@ -106,7 +113,7 @@ module.exports = function (app, explicitConfig) {
     const appInstances = [...app.locals.appList.split(','), 'app_base']
 
     for (const appInstance of appInstances) {
-        const optionsPath = require('path').join(
+        const optionsPath = path.join(
             __dirname,
             "..",
             app.locals.basePath,

@@ -4,8 +4,16 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const compression = require('compression')
 const { rateLimit } = require('express-rate-limit')
+const fs = require("fs");
+const path = require('path');
 
 module.exports = function (app) {
+  // openssl req -nodes -new -x509 -keyout server.key -out server.cert
+  const privateKey  = fs.readFileSync(path.join(__dirname, "..", app.locals.tlsPath, "server.key"), 'utf8');
+  const certificate = fs.readFileSync(path.join(__dirname, "..", app.locals.tlsPath, "server.cert"), 'utf8');
+
+  app.locals.tlsCredentials = {key: privateKey, cert: certificate};
+
   app.use(helmet({
     contentSecurityPolicy: {
       directives: {

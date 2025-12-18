@@ -1,4 +1,5 @@
 'use strict'
+const https = require('https');
 
 const appFactory = require('./app')
 
@@ -15,5 +16,5 @@ if (process.argv[2]) {
 
 appFactory(config)
   .then(app => {
-    app.listen(app.locals.port, () => console.log(`Listening on port: ${app.locals.port}`))
+    https.createServer(app.locals.tlsCredentials, app).listen(app.locals.port,() => console.log(`Listening on port: ${app.locals.port}`))
   })
