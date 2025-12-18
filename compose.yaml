@@ -8,7 +8,7 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  app: &app
+  server:
     build:
       context: .
       args:
@@ -23,24 +23,9 @@ services:
       NODE_ENV: production
     ports:
       - 8080:8080
+      - 8443:8443
     networks:
       - app-network
-
-  server:
-    <<: *app
-    ports:
-      - 8080:8080
-      - 8443:8443
-
-  server-http:
-    <<: *app
-    ports:
-      - 8080:8080
-
-  server-https:
-    <<: *app
-    ports:
-      - 8443:8443
 
 networks:
   app-network:
