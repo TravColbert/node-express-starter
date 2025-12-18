@@ -8,11 +8,21 @@ const fs = require("fs");
 const path = require('path');
 
 module.exports = function (app) {
-  // openssl req -nodes -new -x509 -keyout server.key -out server.cert
-  const privateKey  = fs.readFileSync(path.join(__dirname, "..", app.locals.tlsPath, "server.key"), 'utf8');
-  const certificate = fs.readFileSync(path.join(__dirname, "..", app.locals.tlsPath, "server.cert"), 'utf8');
 
-  app.locals.tlsCredentials = {key: privateKey, cert: certificate};
+  if (app.locals.httpsOn) {
+    const tlsKeyPath = path.join(__dirname, "..", app.locals.tlsPath, app.locals.tlsServerKey)
+    const tlsCertPath = path.join(__dirname, "..", app.locals.tlsPath, app.locals.tlsServerCert)
+    // openssl req -nodes -new -x509 -keyout server.key -out server.cert
+    try {
+      const privateKey = fs.readFileSync(tlsKeyPath, 'utf8');
+      const certificate = fs.readFileSync(tlsCertPath, 'utf8');
+      app.locals.tlsCredentials = { key: privateKey, cert: certificate };
+      app.locals.debug && console.debug('✅\tTLS credentials loaded successfully')
+    } catch (err) {
+      console.error(`⚠️  Could not read TLS key/cert files at ${tlsKeyPath} and ${tlsCertPath}. HTTPS will be disabled.`);
+      app.locals.httpsOn = false
+    }
+  }
 
   app.use(helmet({
     contentSecurityPolicy: {
@@ -35,9 +45,9 @@ module.exports = function (app) {
   // Enable compression if not explicitly disabled
   if (!app.locals.noCompression) {
     app.use(compression())
-    app.locals.debug && console.debug('✅\tCompression is enabled')
+    app.locals.debug && console.debug('✅  Compression is enabled')
   } else {
-    app.locals.debug && console.debug('⚠️\tCompression is disabled!')
+    app.locals.debug && console.debug('⚠️  Compression is disabled!')
   }
 
   if (app.locals.rateLimitFifteenMinuteWindow > 0) {
@@ -48,8 +58,8 @@ module.exports = function (app) {
       legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     })
     app.use(limiter)
-    app.locals.debug && console.debug(`✅\tRate limiting is enabled: ${app.locals.rateLimitFifteenMinuteWindow} requests per 15 minutes`)
+    app.locals.debug && console.debug(`✅  Rate limiting is enabled: ${app.locals.rateLimitFifteenMinuteWindow} requests per 15 minutes`)
   } else {
-    app.locals.debug && console.debug(`⚠️\tRate limiting is disabled`)
+    app.locals.debug && console.debug(`⚠️  Rate limiting is disabled`)
   }
 }

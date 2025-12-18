@@ -13,9 +13,34 @@ module.exports = function (app, explicitConfig) {
         app.locals.nodeEnv !== "production",
         app.locals.nodeEnv !== "production"
     )
-    app.locals.port = getConfigValue(
-        "PORT",
-      8443,
+    app.locals.httpOn = getConfigValue(
+        "HTTP_ON",
+        true,
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.httpsOn = getConfigValue(
+        "HTTPS_ON",
+        true,
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.portHttp = getConfigValue(
+        "PORT_HTTP",
+        8080,
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.portHttps = getConfigValue(
+        "PORT_HTTPS",
+        8443,
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.tlsServerKey = getConfigValue(
+        "TLS_SERVER_KEY",
+        "server.key",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.tlsServerCert = getConfigValue(
+        "TLS_SERVER_CERT",
+        "server.cert",
         app.locals.nodeEnv !== "production"
     )
     app.locals.noCompression = getConfigValue(
@@ -123,17 +148,17 @@ module.exports = function (app, explicitConfig) {
         )
         try {
             const appOptions = require(optionsPath)(app, explicitConfig)
-            app.locals.debug && console.debug(`✅\tLoaded options for ${appInstance.trim()} from ${optionsPath}`)
+            app.locals.debug && console.debug(`✅  Loaded options for ${appInstance.trim()} from ${optionsPath}`)
             // Merge options into app.locals
             for (const [key, value] of Object.entries(appOptions)) {
                 app.locals[key] = value
-                app.locals.debug && console.debug(`\t• Set app.locals.${key} = ${JSON.stringify(value)}`)
+                app.locals.debug && console.debug(`\t  Set app.locals.${key} = ${JSON.stringify(value)}`)
             }
         } catch (err) {
             if (err.code === 'MODULE_NOT_FOUND') {
-                app.locals.debug && console.debug(`⚠️ \tNo options file found for ${appInstance.trim()} at ${optionsPath}, skipping...`)
+                app.locals.debug && console.debug(`⚠️  No options file found for ${appInstance.trim()} at ${optionsPath}, skipping...`)
             } else {
-                console.error(`❌\tError loading options for ${appInstance.trim()} from ${optionsPath}:`, err)
+                console.error(`❌  Error loading options for ${appInstance.trim()} from ${optionsPath}:`, err)
             }
         }
     }
