@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = function (app, explicitConfig) {
     const getConfigValue = require('../lib/tools')(explicitConfig)
 
@@ -6,15 +8,39 @@ module.exports = function (app, explicitConfig) {
         "development",
         true
     )
-    // setting debug to null will disable it
     app.locals.debug = getConfigValue(
         "DEBUG",
-        null,
+        app.locals.nodeEnv !== "production",
         app.locals.nodeEnv !== "production"
     )
-    app.locals.port = getConfigValue(
-        "PORT",
+    app.locals.httpOn = getConfigValue(
+        "HTTP_ON",
+        true,
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.httpsOn = getConfigValue(
+        "HTTPS_ON",
+        true,
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.portHttp = getConfigValue(
+        "PORT_HTTP",
         8080,
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.portHttps = getConfigValue(
+        "PORT_HTTPS",
+        8443,
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.tlsServerKey = getConfigValue(
+        "TLS_SERVER_KEY",
+        "server.key",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.tlsServerCert = getConfigValue(
+        "TLS_SERVER_CERT",
+        "server.cert",
         app.locals.nodeEnv !== "production"
     )
     app.locals.noCompression = getConfigValue(
@@ -50,6 +76,11 @@ module.exports = function (app, explicitConfig) {
     app.locals.configPath = getConfigValue(
         "CONFIG_PATH",
         "config",
+        app.locals.nodeEnv !== "production"
+    )
+    app.locals.tlsPath = getConfigValue(
+        "TLS_PATH",
+        "tls",
         app.locals.nodeEnv !== "production"
     )
     app.locals.publicPath = getConfigValue(
@@ -102,4 +133,33 @@ module.exports = function (app, explicitConfig) {
         "you should really change this",
         false
     )
+
+    // Now, let's load options from available app modules:
+    const appInstances = [...app.locals.appList.split(','), 'app_base']
+
+    for (const appInstance of appInstances) {
+        const optionsPath = path.join(
+            __dirname,
+            "..",
+            app.locals.basePath,
+            appInstance.trim(),
+            app.locals.configPath,
+            "options.js"
+        )
+        try {
+            const appOptions = require(optionsPath)(app, explicitConfig)
+            app.locals.debug && console.debug(`✅  Loaded options for ${appInstance.trim()} from ${optionsPath}`)
+            // Merge options into app.locals
+            for (const [key, value] of Object.entries(appOptions)) {
+                app.locals[key] = value
+                app.locals.debug && console.debug(`\t  Set app.locals.${key} = ${JSON.stringify(value)}`)
+            }
+        } catch (err) {
+            if (err.code === 'MODULE_NOT_FOUND') {
+                app.locals.debug && console.debug(`⚠️  No options file found for ${appInstance.trim()} at ${optionsPath}, skipping...`)
+            } else {
+                console.error(`❌  Error loading options for ${appInstance.trim()} from ${optionsPath}:`, err)
+            }
+        }
+    }
 }

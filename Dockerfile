@@ -59,6 +59,7 @@ COPY . .
 
 # Expose the port that the application listens on.
 EXPOSE 8080
+EXPOSE 8443
 
 # Run the application.
 ENTRYPOINT [ "npm", "start" ]

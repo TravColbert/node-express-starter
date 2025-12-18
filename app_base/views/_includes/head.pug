@@ -1,17 +1,23 @@
-include mixins 
-
-head(prefix="og: http://ogp.me/ns# nodejsexpressdemo: http://ogp.me/ns/apps/nodejsexpressdemo#")
+head(lang=lang || "en", itemscope="itemscope", itemtype="http://schema.org/WebSite")
   meta(charset="utf-8")
-  meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
   meta(name="viewport", content="width=device-width,initial-scale=1")
 
-  script(defer src="https://unpkg.com/htmx.org@2.0.4", integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+", crossorigin="anonymous")
+  - var appName = appName || 'Node.js Express Mongoose Starter'
+  - var description = [(appDescription || 'Node.js Express Mongoose Starter'), description].filter(element => { return (element || element?.trim() != "")}).join(' - ')
+  - var keywords = [keywords, (appKeywords || "nodejs, express, starter")].join(', ')
+  - var title = appName + ' :: ' + title
+
+  title= title
+  meta(name="keywords", content= keywords)
+  meta(name="description", content= description)
+  //- Cleaner, less-dependent preview meta-tag setup
+  //- see: https://getoutofmyhead.dev/link-preview-meta-tags/
+  meta(itemprop="name", content= title)
+  meta(itemprop="description", content= description)
+  meta(itemprop="image", content="/logo.png")
+  link(rel="alternate", type="application/json+oembed", href="https://getoutofmyhead.dev/oembed_link.json", title= title)
+
+  link(rel="stylesheet", href="/css/app.css")
 
   block head
-    +head
-
-  //
-     HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries
-  //if lt IE 9
-    script(src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js")
-    script(src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js")
+    //- Define extra scripts and links in the 'head' block

@@ -10,25 +10,29 @@ var greetings = [
         "greeting": "Hola Mundo"
     },
     {
+        "lang": "fa",
+        "greeting": "سلام دنیا"
+    },
+    {
         "lang": "fr",
         "greeting": "Bonjour le monde"
-    },
-    {
-        "lang": "de",
-        "greeting": "Hallo Welt"
-    },
-    {
-        "lang": "it",
-        "greeting": "Ciao mondo"
     },
     {
         "lang": "ja",
         "greeting": "こんにちは世界"
     },
     {
+        "lang": "sw",
+        "greeting": "Habari Dunia!"
+    },
+    {
+        "lang": "tlh",
+        "greeting": "qo' vIvan!"
+    },
+    {
         "lang": "zh",
         "greeting": "你好，世界"
-    }
+    },
 ]
 
 module.exports = {

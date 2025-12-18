@@ -1,10 +1,9 @@
-const { error } = require('console')
 const fs = require('fs')
 const path = require('path')
 
 
 module.exports = function (app) {
-    app.locals.debug && console.debug('ℹ️\tSetting up routes')
+    app.locals.debug && console.debug('ℹ️  Setting up routes')
 
     const setRenderObject = function (req, res, next) {
         res.locals.render = {}
@@ -50,10 +49,12 @@ module.exports = function (app) {
 
     app.use([setRenderObject, setAppLang, setAppName, detectHtmxRequest])
 
+    const appInstances = [...app.locals.appList.split(','), 'app_base']
     /**
      * Dynamically load all routers from each app instance
+     * Also include the 'app_base' instance for default/shared routes
      */
-    for (const appInstance of app.locals.appList.split(',')) {
+    for (const appInstance of appInstances) {
         // Since we're currently in config/, we need to go up one level to __dirname
         const routerPath = path.join(__dirname, "..", app.locals.basePath, appInstance.trim(), app.locals.routerPath)
 
@@ -74,8 +75,9 @@ module.exports = function (app) {
             // Load and mount each router
             routerFiles.forEach(file => {
                 const routeName = path.parse(file).name
-                app.locals.debug && console.debug(`Mounting router: ${routeName}`)
+                app.locals.debug && console.debug(`\t\tMounting router: ${routeName}`)
                 const router = require(path.join(routerPath, file))(app, appInstance.trim())
+                // The name of the route is the same as the file name
                 app.use(`/${routeName}`, router)
             })
         } else {
@@ -89,7 +91,7 @@ module.exports = function (app) {
      * The default router will be the first app instance with a router folder
      * and an index.js file
      */
-    for (const appInstance of app.locals.appList.split(',')) {
+    for (const appInstance of appInstances) {
         const routerPath = path.join(__dirname, "..", app.locals.basePath, appInstance.trim(), app.locals.routerPath, "index.js")
         if (fs.existsSync(routerPath)) {
             app.locals.debug && console.debug(`Mounting index(/) route from ${appInstance.trim()} `)
@@ -103,19 +105,21 @@ module.exports = function (app) {
      * If the express app has no "/" route then render the home page view
      */
     if (!app._router.stack.some(r => r.route && r.route.path === '/' && r.route.methods.get)) {
-        app.locals.debug && console.info(`No "/" route found, seeking default home view...`)
+        app.locals.debug && console.info(`⚠️  No "/" route found, seeking default home view...`)
         // Check each app instance for a home view
-        for (const appInstance of app.locals.appList.split(',')) {
+        for (const appInstance of appInstances) {
             const viewPath = path.join(__dirname, "..", app.locals.basePath, appInstance.trim(), app.locals.viewPath, "home.pug")
             if (fs.existsSync(viewPath)) {
-                app.locals.debug && console.debug(`Mounting ${viewPath} as home view`)
+                // Is there a home view here?
+                app.locals.debug && console.debug(`\t Mounting ${viewPath} as home view`)
                 app.get('/', (_req, res) => {
                     res.render(viewPath, { title: 'Home' })
                 })
                 break
             } else {
+                // Otherwise use a default "Hello World!" response
                 app.get('/', (_req, res) => {
-                    console.warn(`No home view found for ${appInstance.trim()}, using default response.`)
+                    console.warn(`\t No home view found for ${appInstance.trim()}, using default response.`)
                     res.send('Hello World!')
                 })
             }

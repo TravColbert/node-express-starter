@@ -3,10 +3,13 @@ const router = express.Router({ mergeParams: true })
 const path = require('path')
 
 module.exports = function (app) {
+    // Turn off this route in production
+    if (app.locals.nodeEnv === "production") return router
+
     const currentRouteName = path.basename(__filename, '.js')
 
     // Require the controller with the same name as the router
-    const controller = require(path.join(__dirname, '../../', app.locals.appPath, app.locals.controllerPath, currentRouteName))(app)
+    const controller = require(path.join(__dirname, '../', app.locals.controllerPath, currentRouteName))(app)
 
     router.route("/new")
         .get((req, res) => {

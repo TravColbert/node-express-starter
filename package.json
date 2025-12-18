@@ -8,7 +8,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
+    "demo": "node server.js '{\"DEBUG\": true, \"APP_LIST\": \"app_demo\"}'",
+    "dev": "nodemon server.js '{\"DEBUG\": true}'",
     "test": "nyc tape 'test/**/*.js'"
   },
   "dependencies": {

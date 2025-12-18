@@ -1,3 +1,9 @@
+/**
+ * This function is intended to simulate a slow function.
+ * But the goal is to cache the result so that the 2nd call is fast.
+ * 
+ * @returns 
+ */
 const slowFunction = async () => {
     return new Promise((resolve) => {
         setTimeout(() => {

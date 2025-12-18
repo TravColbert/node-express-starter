@@ -1,7 +1,5 @@
 "use strict"
 
-const { config } = require("dotenv")
-
 module.exports = function (explicitConfig = {}) {
     /**
      * We configure through 4 ways - all of them converge at different
@@ -50,7 +48,11 @@ module.exports = function (explicitConfig = {}) {
      *
      * The process.env and config files are merged into the app.locals.
      */
-    if (explicitConfig && explicitConfig.hasOwnProperty('IMPORT_ENV') && explicitConfig.IMPORT_ENV !== false) require("dotenv").config()
+    if (
+        explicitConfig &&
+        explicitConfig.hasOwnProperty('IMPORT_ENV') &&
+        explicitConfig.IMPORT_ENV !== false
+    ) require("dotenv").config()
     const fs = require('fs')
     const path = require("path")
     const express = require("express")
@@ -69,12 +71,15 @@ module.exports = function (explicitConfig = {}) {
             for (const pathItem of pathArray) {
                 if (fs.existsSync(pathItem)) {
                     console.info(`Attempting load of configuration module: ${pathItem}`)
+                    console.group()
                     require(pathItem)(app, config)
                     console.info(`Loaded configuration module: ${pathItem}`)
+                    console.groupEnd()
                     return true
                 }
             }
             console.debug(`Configuration module not found`)
+            return false
         }
 
         /**
