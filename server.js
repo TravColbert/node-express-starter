@@ -18,11 +18,13 @@ if (process.argv[2]) {
 appFactory(config)
   .then(app => {
     if (app.locals.db) {
-      app.locals.db.sync().then(() => {
-        console.log('Database synchronized successfully.')
-      }).catch(err => {
-        console.error('Error synchronizing database:', err)
-      })
+      app.locals.db.sync()
+        .then(() => {
+          console.log('Database synchronized successfully.')
+          app.locals.runJobs("onAppStart")
+        }).catch(err => {
+          console.error('Error synchronizing database:', err)
+        })
     }
 
     if (app.locals.httpOn) {
