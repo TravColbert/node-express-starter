@@ -2,7 +2,7 @@ node_modules/
 .monitor
 Makefile
 .DS_Store
-.env
+.env*
 data
 .devcontainer/
 app/

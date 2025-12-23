@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 
-
 module.exports = function (app) {
     app.locals.debug && console.debug('ℹ️  Setting up routes')
 

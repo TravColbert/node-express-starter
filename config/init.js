@@ -28,10 +28,11 @@ module.exports = function (app) {
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'script-src-elem'", "https://unpkg.com", "'unsafe-inline'"],
+        scriptSrc: ["'self'", "https://unpkg.com", "'unsafe-inline'"],
+        scriptSrcElem: ["'self'", "https://unpkg.com"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        styleSrcElem: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https://picsum.photos", "https://fastly.picsum.photos"],
+        styleSrcElem: ["'self'", "'unsafe-inline'", "https://matcha.mizu.sh"],
+        imgSrc: ["'self'", "data:"],
         objectSrc: ["'none'"],
       }
     }

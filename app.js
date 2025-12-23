@@ -100,6 +100,16 @@ module.exports = function (explicitConfig = {}) {
         )
 
         /**
+         * Set up database
+         */
+        loadConfigModule(
+            [
+                path.join(__dirname, 'config', 'database.js')
+            ],
+            explicitConfig
+        )
+
+        /**
          * Set up sessions
          */
         loadConfigModule(

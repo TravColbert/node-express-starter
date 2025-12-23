@@ -65,7 +65,7 @@ module.exports = function (app, explicitConfig) {
     )
     app.locals.appList = getConfigValue(
         "APP_LIST",
-        "app",
+        "app_demo",
         true
     )
     app.locals.basePath = getConfigValue(
@@ -131,6 +131,16 @@ module.exports = function (app, explicitConfig) {
     app.locals.sessionSecret = getConfigValue(
         "SESSION_SECRET",
         "you should really change this",
+        false
+    )
+    app.locals.databaseConfig = getConfigValue(
+        "DATABASE_CONFIG",
+        {
+            dialect: "sqlite",
+            storage: path.join(__dirname, "..", "database", "database.sqlite"),
+            logging: app.locals.debug ? console.log : false,
+            alter: true
+        },
         false
     )
 
