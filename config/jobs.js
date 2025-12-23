@@ -33,9 +33,13 @@ module.exports = function (app) {
           console.log(`Job ${jobName} completed successfully.`)
         } catch (err) {
           console.error(`Error running job ${jobName}:`, err)
+          throw err
         }
       }
     }
+
+    console.log(`Completed running jobs for trigger: ${trigger}`)
+    return true
   }
 
   for (const appInstance of app.locals.appList.split(',')) {
@@ -49,6 +53,7 @@ module.exports = function (app) {
         .filter(file => file.endsWith('.js'))
 
       jobFiles.forEach(file => {
+        // Load each job file passing the app instance to it
         require(path.join(jobPath, file))(app)
       })
     }
