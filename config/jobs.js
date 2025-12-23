@@ -9,8 +9,6 @@ const path = require('path')
  * @param {*} app 
  */
 module.exports = function (app) {
-  // Maybe this would be a good place to register a super-simple job-runner...
-
   /**
    * Manual job runner
    * 
