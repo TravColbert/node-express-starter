@@ -113,6 +113,11 @@ module.exports = function (app, explicitConfig) {
         "helpers",
         app.locals.nodeEnv !== "production"
     )
+    app.locals.jobPath = getConfigValue(
+        "JOB_PATH",
+        "jobs",
+        app.locals.nodeEnv !== "production"
+    )
     app.locals.appName = getConfigValue(
         "APP_NAME",
         "Node.js Express Starter",

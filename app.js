@@ -186,6 +186,13 @@ module.exports = function (explicitConfig = {}) {
             explicitConfig
         )
 
+        loadConfigModule(
+            [
+                path.join(__dirname, 'config', 'jobs.js')
+            ],
+            explicitConfig
+        )
+
         /** Resolve the promise */
         resolve(app)
     })

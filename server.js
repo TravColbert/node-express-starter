@@ -18,18 +18,21 @@ if (process.argv[2]) {
 appFactory(config)
   .then(app => {
     if (app.locals.db) {
-      app.locals.db.sync().then(() => {
-        console.log('Database synchronized successfully.')
-      }).catch(err => {
-        console.error('Error synchronizing database:', err)
-      })
+      app.locals.db.sync()
+        .then(() => {
+          console.log('Database synchronized successfully.')
+          app.locals.runJobs("onAppStart")
+        }).then(() => {
+          if (app.locals.httpOn) {
+            http.createServer(app).listen(app.locals.portHttp, () => console.log(`Listening on port: ${app.locals.portHttp}`))
+          }
+
+          if (app.locals.httpsOn && app.locals.tlsCredentials) {
+            https.createServer(app.locals.tlsCredentials, app).listen(app.locals.portHttps, () => console.log(`Listening on port: ${app.locals.portHttps}`))
+          }
+        }).catch(err => {
+          console.error('Error synchronizing database:', err)
+        })
     }
 
-    if (app.locals.httpOn) {
-      http.createServer(app).listen(app.locals.portHttp, () => console.log(`Listening on port: ${app.locals.portHttp}`))
-    }
-
-    if (app.locals.httpsOn && app.locals.tlsCredentials) {
-      https.createServer(app.locals.tlsCredentials, app).listen(app.locals.portHttps, () => console.log(`Listening on port: ${app.locals.portHttps}`))
-    }
   })
