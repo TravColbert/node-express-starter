@@ -166,21 +166,6 @@ module.exports = function (app, explicitConfig) {
     );
     try {
       require(optionsPath)(app, explicitConfig);
-      // app.locals.debug &&
-      //   console.debug(
-      //     `✅  Loaded options for ${appInstance.trim()} from ${optionsPath}`,
-      //   );
-      // // Merge options into app.locals
-      // for (const [key, value] of Object.entries(appOptions)) {
-      //   // If the key = "contentSecurityPolicy" we want to merge all the sub-keys
-      //   if (key == "contentSecurityPolicy") {
-
-      //   } else {
-      //     app.locals[key] = value;
-      //   }
-      //   app.locals.debug &&
-      //     console.debug(`\t  Set app.locals.${key} = ${JSON.stringify(value)}`);
-      // }
     } catch (err) {
       if (err.code === "MODULE_NOT_FOUND") {
         app.locals.debug &&
