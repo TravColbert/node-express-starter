@@ -14,5 +14,5 @@ app_*/
 coverage
 .idea/
 tls/
-database/
+database/*.sqlite
 config/*.json

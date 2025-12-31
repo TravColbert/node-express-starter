@@ -180,5 +180,4 @@ module.exports = function (app, explicitConfig) {
       }
     }
   }
-  console.dir(app.locals.contentSecurityPolicy);
 };
