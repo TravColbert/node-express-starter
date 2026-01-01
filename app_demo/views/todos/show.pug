@@ -1,0 +1,10 @@
+extends ../layout-default.pug
+
+block content
+    h1 Todo
+    .todo.item(id=todo.id)
+        include fragments/form.pug
+    .navigation
+        button(type="submit" hx-get=`/todos/${todo.id}/edit` hx-target=".content" hx-push-url="true") Edit
+        button(type="reset" hx-delete=`/todos/${todo.id}` hx-target=".content") Delete
+        button(type="button" hx-get="/todos" hx-target=".content" hx-push-url="true") Back

@@ -8,11 +8,11 @@
     - else 
       | #{info}
 
-- if (typeof errors != 'undefined' && errors.length)
+- if (errors && errors.length)
   .fade.show.alert.alert-danger
     ul.my-2.px-3
       each error in errors
-        li!= error.error
+        li= error.message
 
 - if (typeof success != 'undefined' && success.length)
   .fade.show.alert.alert-success

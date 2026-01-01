@@ -1,0 +1,6 @@
+.item-list#todo-list
+    if todos.length === 0
+      p No todos found.
+    else
+        each todo in todos
+            include show.pug

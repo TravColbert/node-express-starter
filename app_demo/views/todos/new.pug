@@ -1,0 +1,14 @@
+h1 New Todo
+form(action="/todos" method="post")
+    - const todoDescriptionClasses = invalidElements && invalidElements.includes('description') ? 'is-invalid' : '' 
+    .form-group(class=todoDescriptionClasses)
+        label(for="description") Description
+            - const todoDescription = todo.description || ''
+            input.form-control(type="text" id="description" name="todo[description]" value=todoDescription)
+    - const todoDoneClasses = invalidElements && invalidElements.includes('done') ? 'is-invalid' : '' 
+    .form-group(class=todoDoneClasses)
+        label(for="done") Done
+            - const todoChecked = todo.done ? 'checked' : null
+            input.form-check-input(type="checkbox" id="done" name="todo[done]" checked=todoChecked)
+    button(type="submit" class="btn btn-primary" hx-post="/todos" hx-target=".content" hx-push-url="true") Create Todo
+    button(type="button" class="btn btn-primary" hx-get="/todos" hx-target=".content" hx-push-url="true") Cancel

@@ -17,6 +17,7 @@
   --bg-light: #f9fafb;
   --bg-white: #ffffff;
   --border-color: #e5e7eb;
+  --invalid-color: #dc2626;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -418,8 +419,19 @@ a {
 }
 
 /* ========================================
-   Mobile Responsive Styles
+   Utility Classes
    ======================================== */
+.is-invalid {
+  box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25) !important;
+}
+
+.is-invalid input {
+  border-color: var(--invalid-color) !important;
+}
+
+/* ========================================
+Mobile Responsive Styles
+======================================== */
 
 @media (max-width: 768px) {
   .navbar-menu {
