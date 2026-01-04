@@ -4,8 +4,12 @@ const path = require("path");
 module.exports = function (app) {
   app.set("view options", { compileDebug: false });
 
-  const templateLocations = [...app.locals.appList.split(","), "app_base"];
-  let viewPaths = templateLocations
+  const appInstances = [
+    ...new Set([...app.locals.appList.split(","), "app_base"]),
+  ];
+
+  // const templateLocations = [...app.locals.appList.split(","), "app_base"];
+  let viewPaths = appInstances
     .map((appInstance) => {
       const viewPath = path.join(
         __dirname,
