@@ -135,7 +135,9 @@ module.exports = function (app) {
     detectHtmxRequest,
   ]);
 
-  const appInstances = [...app.locals.appList.split(","), "app_base"];
+  const appInstances = [
+    ...new Set([...app.locals.appList.split(","), "app_base"]),
+  ];
   /**
    * Dynamically load all routers from each app instance
    * Also include the 'app_base' instance for default/shared routes
