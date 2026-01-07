@@ -6,16 +6,15 @@ block head
   link(rel="stylesheet", href="/css/matcha-reset.css")
 
 block content
-    - var pageTitle = `Todo Demo`
-    h2= pageTitle
-    if errors
-        section
-            .alert.alert-danger
-                each error in errors
-                    p= error.message
+  - var pageTitle = `Todo Demo`
+  h2= pageTitle
+  if errors
     section
-        header
-            h3= `Todos (${todos.length})`
-        include fragments/index.pug
-        footer
-            button(type="button" hx-get="/todos/new" hx-target="#todo-list" hx-swap="beforeend") New Todo
+      .alert.alert-danger
+        each error in errors
+          p= error.message
+  section#todo-list
+    include fragments/index.pug
+  //section
+  //  footer
+  //      button(type="button" hx-get="/todos/new" hx-target="#todo-list" hx-swap="beforeend") New Todo

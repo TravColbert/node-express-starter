@@ -4,6 +4,12 @@ const path = require("path");
 module.exports = function (app) {
   app.locals.debug && console.debug("ℹ️  Setting up routes");
 
+  const appHello = function (req, res, next) {
+    app.locals.debug &&
+      console.debug(`${req.method.toUpperCase()}\t${req.path}`);
+    next();
+  };
+
   const setRenderObject = function (req, res, next) {
     res.locals.render = {};
     return next();
@@ -38,7 +44,7 @@ module.exports = function (app) {
       console.debug(
         `*** Rendering: ${res.locals.render?.template || "index"} ***`,
       );
-    app.locals.debug && console.dir(res.locals.render);
+    app.locals.debug && console.dir(res.locals);
     if (res.locals.isFoundRoute)
       return res.render(
         res.locals.render?.template || "index",
@@ -102,6 +108,7 @@ module.exports = function (app) {
         }
         // console.groupEnd();
       }
+
       return false;
     };
 
@@ -128,6 +135,7 @@ module.exports = function (app) {
   };
 
   app.use([
+    appHello,
     preFlightRouteCheck,
     setRenderObject,
     setAppLang,
@@ -211,6 +219,11 @@ module.exports = function (app) {
     }
   }
 
+  /**
+   * If we still haven't established a default route (/)
+   * then start looking for a PUG template that can serve
+   * as the index file.
+   */
   if (!findRoute(app._router.stack, "/")) {
     app.locals.debug &&
       console.info(`⚠️  No "/" route found, seeking default home view...`);
@@ -224,21 +237,26 @@ module.exports = function (app) {
         app.locals.viewPath,
         "index.pug",
       );
+      app.locals.debug && console.debug(`Searching for: ${viewPath}`);
       if (fs.existsSync(viewPath)) {
         // Is there a home view here?
         app.locals.debug &&
           console.debug(`ℹ️  Mounting ${viewPath} as home view`);
-        // app.get("/", defaultRender);
-        break;
-      } else {
-        // Otherwise use a default "Hello World!" response
-        app.get("/", (_req, res) => {
-          console.warn(
-            `⚠️  No home view found for ${appInstance.trim()}, using default response.`,
-          );
-          res.send("Hello World!");
+        app.get("/", (req, res, next) => {
+          res.locals.isFoundRoute = true;
+          next();
         });
+        break;
       }
+      // else {
+      //   // Otherwise use a default "Hello World!" response
+      //   app.get("/", (_req, res) => {
+      //     console.warn(
+      //       `⚠️  No home view found for ${appInstance.trim()}, using default response.`,
+      //     );
+      //     res.send("Hello World!");
+      //   });
+      // }
     }
   }
 
