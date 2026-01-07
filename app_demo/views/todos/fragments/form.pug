@@ -1,0 +1,14 @@
+form.todo.item(id=`todo-${todo.id}`)
+  article
+    label Description:
+      input(type="text" id=`todo-description-${todo.id}` name="todo[description]" value=todo.description required=true placeholder="Todo description")
+    label Completed: 
+      input.form-check-input(type="checkbox" id=`todo-done-${todo.id}` name="todo[done]" checked=todo.done)
+      small Check to complete the task
+    footer
+      if todo.id
+        button(type="submit" hx-put=`/todos/${todo.id}` hx-select="#todo-list" hx-target="#todo-list") Submit
+        button(type="reset" hx-get=`/todos` hx-select=`#todo-${todo.id}` hx-target=`#todo-${todo.id}` hx-swap="outerHTML") Cancel
+      else
+        button(type="submit" hx-post=`/todos` hx-target="#todo-list") Submit
+        button(type="reset" hx-get="/todos" hx-select="#todo-list" hx-target="#todo-list" hx-swap="outerHTML") Cancel

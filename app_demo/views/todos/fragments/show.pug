@@ -1,0 +1,22 @@
+article.todo.item(id=`todo-${todo.id}`)
+  label Description:
+    a(id=`todo-description-link-${todo.id}`
+      hx-get=`/todos/${todo.id}/edit` 
+      hx-target=`#todo-${todo.id}`
+      hx-swap="outerHTML"
+      hx-push-url="true")= todo.description
+  label Completed:
+    input.form-check-input(type="checkbox" id=`todo-done-${todo.id}` name="todo[done]" checked=todo.done hx-get=`/todos/${todo.id}/completed` hx-target=".content")
+    small Check to complete the task
+  footer
+    button(
+      type="button" 
+      hx-get=`/todos/${todo.id}/edit` 
+      hx-target=`#todo-${todo.id}`
+      hx-swap="outerHTML") Edit
+    button(
+      type="reset" 
+      hx-delete=`/todos/${todo.id}` 
+      hx-target="#main-content" 
+      hx-push-url="/todos") Delete
+

@@ -17,7 +17,13 @@ module.exports = function (app) {
             modelFiles.forEach(file => {
                 const modelName = path.parse(file).name
                 app.locals.debug && console.debug(`Hydrating model: ${modelName}`)
-                app.locals.models[modelName] = require(path.join(modelPath, file))
+                const model = require(path.join(modelPath, file))
+                // If the model is a function, call it with app
+                if (typeof model === 'function') {
+                    app.locals.models[modelName] = model(app)
+                } else {
+                    app.locals.models[modelName] = model
+                }
             })
         }
     }

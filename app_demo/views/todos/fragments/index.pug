@@ -1,0 +1,10 @@
+header
+  h3= `Todos (${todos.length})`
+#item-list
+  if todos.length === 0
+    p No todos found.
+  else
+    each todo in todos
+      include show.pug
+footer
+    button(type="button" hx-get="/todos/new" hx-target="#item-list" hx-swap="beforeend") New Todo

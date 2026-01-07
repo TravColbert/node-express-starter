@@ -2,7 +2,7 @@ node_modules/
 .monitor
 Makefile
 .DS_Store
-.env
+.env*
 data
 .devcontainer/
 app/
@@ -12,3 +12,7 @@ app_*/
 *.notinuse
 .nyc_output
 coverage
+.idea/
+tls/
+database/*.sqlite
+config/*.json
