@@ -116,7 +116,7 @@ module.exports = function (app, explicitConfig) {
       "options.js",
     );
     try {
-      require(optionsPath)(app, explicitConfig);
+      require(optionsPath)(app, appInstance);
     } catch (err) {
       if (err.code === "MODULE_NOT_FOUND") {
         app.locals.debug &&
