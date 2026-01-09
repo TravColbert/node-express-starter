@@ -95,10 +95,48 @@ tape("Dot (.) paths work for includes", (t) => {
   appFactory(testConfig)
     .then((app) => {
       supertest(app)
-        .get("/page")
+        .get("/pug")
         .expect(
           200,
           '<!DOCTYPE html><html lang="en"><body><p>We can\'t get here through a direct request</p><p>But we can get to this text directly.</p></body></html>',
+        )
+        .end((err, res) => {
+          if (err) {
+            t.error(err, "Got error: " + err);
+          }
+          t.end();
+        });
+    })
+    .catch((err) => t.fail(err));
+});
+
+tape("Responds with HTML file", (t) => {
+  appFactory(testConfig)
+    .then((app) => {
+      supertest(app)
+        .get("/page")
+        .expect(
+          200,
+          '<!DOCTYPE html>\n<html lang="en">\n  <body>\n    A plain HTML page.\n  </body>\n</html>\n',
+        )
+        .end((err, res) => {
+          if (err) {
+            t.error(err, "Got error: " + err);
+          }
+          t.end();
+        });
+    })
+    .catch((err) => t.fail(err));
+});
+
+tape("Responds with JS-generated result", (t) => {
+  appFactory(testConfig)
+    .then((app) => {
+      supertest(app)
+        .get("/script")
+        .expect(
+          200,
+          '<!DOCTYPE html>\n<html lang="en">\n  <body>\n    A plain HTML page.\n  </body>\n</html>\n',
         )
         .end((err, res) => {
           if (err) {
